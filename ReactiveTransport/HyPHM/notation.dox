@@ -1,0 +1,155 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//! @page notation Notation
+//!
+//! @section geometry Geometry
+//! <table border="0" cellspacing="5">
+//! <tr>
+//! <th align="left"><b>Symbol</b></th>
+//! <th align="left"><b>Meaning</b></th>
+//! <th align="left"><b>Remarks</b></th>
+//! </tr>
+//! <tr>
+//!  <td>@f$\mathcal{T}@f$</td>
+//!  <td>set of triangles</td>
+//!  <td>@f$\mathcal{T} = \{T\}@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\mathcal{E}@f$</td>
+//!  <td>set of edges</td>
+//!  <td>@f$\mathcal{E} = \{E\}@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\mathcal{V}@f$</td>
+//!  <td>set of vertices</td>
+//!  <td>@f$\mathcal{V} = \{V\}@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\#T@f$</td>
+//!  <td>number of triangles</td>
+//!  <td>(dirty for @f$\#\mathcal{T}@f$)</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\#E@f$</td>
+//!  <td>number of edges</td>
+//!  <td>see above</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\# V@f$</td>
+//!  <td>number of vertices</td>
+//!  <td>see above</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\vec{x}^\text{bary}_E@f$</td>
+//!  <td>barycenter/midpoint of edge @f$E@f$</td>
+//!  <td> </td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\vec{x}^\text{opp}_E@f$</td>
+//!  <td>vertex opposite to edge @f$E@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\vec{\nu}@f$</td>
+//!  <td>outward normal vector</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\vec{\nu}_E@f$</td>
+//!  <td>normal vector of edge @f$E@f$</td>
+//!  <td>each edge has a direction, @f$\vec{\nu}@f$ is defined such that @f$\angle(\vec{E},\vec{\nu}) = -\pi/2@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\Omega@f$</td>
+//!  <td>domain</td>
+//!  <td>in two-scale context the homogeneous domain @f$\Omega=\Omega_0@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\Omega_h@f$</td>
+//!  <td>geometric interpolation of @f$\Omega@f$</td>
+//!  <td>this is what the Grid covers </td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\Omega_\varepsilon@f$</td>
+//!  <td>domain with periodic obstacles</td>
+//!  <td>highly perforated domain representing the pore scale</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\partial\Omega_\mathrm{D}@f$</td>
+//!  <td>Dirichlet boundary conditions</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\partial\Omega_\mathrm{N}@f$</td>
+//!  <td>Neumann boundary conditions</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\partial\Omega_\mathrm{flux}@f$</td>
+//!  <td>flux boundary conditions</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$Y@f$</td>
+//!  <td>(periodic) unit cell</td>
+//!  <td>represents one obstacle set on pore scale, the inner is denoted by @f$Y_\ell@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$J@f$</td>
+//!  <td>time interval</td>
+//!  <td>@f$J = \,]t_0,T]@f$</td>
+//! </tr>
+//! </table>
+//!
+//!
+//! @section functionspaces Function Spaces
+//! See Variable.type.
+//! 
+//! @section operators Operators
+//! <table border="0" cellspacing="5">
+//! <tr>
+//! <th align="left"><b>Symbol</b></th>
+//! <th align="left"><b>Meaning</b></th>
+//! <th align="left"><b>Remarks</b></th>
+//! </tr>
+//! <tr>
+//!  <td>@f$\vec{\nabla}@f$</td>
+//!  <td>spatial gradient</td>
+//!  <td>@f$\vec{\nabla}=(\partial/\partial x, \partial/\partial y)^T@f$, the divergence of a vector field @f$\vec{v}@f$ hence is denoted by @f$\vec{\nabla}\cdot\vec{v}@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\partial_t@f$</td>
+//!  <td>time derivative</td>
+//!  <td>@f$\partial_t=\partial/\partial t@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$|\cdot|@f$</td>
+//!  <td>area or absolute value</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$\langle \,\cdot\, \rangle_\Omega@f$</td>
+//!  <td>integral mean</td>
+//!  <td>@f$\langle w \rangle_\Omega = \frac{1}{|\Omega|} \int_\Omega w(\vec{x}) \,d\vec{x}@f$</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$(\,\cdot\,,\,\cdot\,)@f$</td>
+//!  <td>@f$L^2@f$-scalar product</td>
+//!  <td>@f$(\,v\,,\,w\,) = (\,v\,,\,w\,)_{L^2(\Omega)} = \int_\Omega v(\vec{x})\,w(\vec{x})\,d\vec{x}@f$</td>
+//! </tr>
+//! </table>
+//!
+//! 
+//! @section symbols Further Symbols
+//! <table border="0" cellspacing="5">
+//! <tr>
+//! <th align="left"><b>Symbol</b></th>
+//! <th align="left"><b>Meaning</b></th>
+//! <th align="left"><b>Remarks</b></th>
+//! </tr>
+//! <tr>
+//!  <td>@f$\delta@f$</td>
+//!  <td>Kronecker-Delta</td>
+//!  <td>@f$\delta_{EE'} = 1@f$ if @f$E = E'@f$ and zero otherwise</td>
+//! </tr>
+//! <tr>
+//!  <td>@f$O@f$</td>
+//!  <td>Landau-Symbol</td>
+//!  <td>@f$O(n^2)@f$ eg means quadratic asymptotic behaviour in @f$n@f$</td>
+//! </tr>
+//! </table>
+//!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

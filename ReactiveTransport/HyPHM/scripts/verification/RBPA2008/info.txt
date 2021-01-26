@@ -1,0 +1,7 @@
+Test scenario acc. to
+
+Florin A. Radu, Markus Bause, Alexander Prechtel and Sabine Attinger
+``A mixed hybrid finite element discretization scheme for reactive transport
+in porous media''. In Numerical Mathematics and Advanced Applications, K.
+Kunisch, G. Of, O. Steinbach (editors), Springer, 2008, pp. 513-520.
+

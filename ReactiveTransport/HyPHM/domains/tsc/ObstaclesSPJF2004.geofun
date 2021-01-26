@@ -1,0 +1,73 @@
+//! @file ObstaclesSPJF2004.geofun Definition of the obstacles given from @ref SPJF2004.
+
+Function Obstacles // input: t, eps, xtrans   output: Line Loop(theloops[t])
+
+////////////////
+afact = 1;  // scaling factor for grid adaption
+////////////////
+
+  // centers of strips (as orig. def. in SPJF2004)
+  cx[0] = 0.60; cy[0] = 0.35; phi[0] =  0.0;                // M1
+  cx[1] = 0.98; cy[1] = 0.79; phi[1] = -0.698131700797732;  // M2
+  cx[2] = 0.55; cy[2] = 1.21; phi[2] =  0.872664625997165;  // M3
+  cx[3] = 0.60; cy[3] = 1.86; phi[3] = -0.174532925199433;  // M4
+  cx[4] = 1.12; cy[4] = 2.09; phi[4] = -1.047197551196598;  // M5
+  cx[5] = 0.59; cy[5] = 2.60; phi[5] =  0.349065850398866;  // M6
+
+cx[6] = cx[0] + 1.5;
+cx[7] = cx[1] + 1.5;
+cx[8] = cx[2] + 1.5;
+cx[9] = cx[3] + 1.5;
+cx[10] = cx[4] + 1.5;
+cx[11] = cx[5] + 1.5;
+cy[6] = cy[0];
+cy[7] = cy[1];
+cy[8] = cy[2];
+cy[9] = cy[3];
+cy[10] = cy[4];
+cy[11] = cy[5];
+phi[6] = phi[0];
+phi[7] = phi[1];
+phi[8] = phi[2];
+phi[9] = phi[3];
+phi[10] = phi[4];
+phi[11] = phi[5];
+
+
+  /* Remark:
+     Via command Dilate it should be possible to scale [0,1.5]x[0,3] to one half of Y (factor 1/3)
+     and to scale the result to [0,eps]x[0,eps] (factor eps).  Since there is a bug while using
+     Dilate we scale directly in the definition of the points with factor eps/3
+  */
+  For j In {0:1} // right and left part of Y
+  For k In {0:5} // 6 obstacles
+
+    p0[k+6*j] = newp;  Point(p0[k+6*j]) = {(eps/3)*(cx[k+6*j]-0.5), (eps/3)*(cy[k+6*j]-0.05), 0,   afact*h};
+    p1[k+6*j] = newp;  Point(p1[k+6*j]) = {(eps/3)*(cx[k+6*j]+0.5), (eps/3)*(cy[k+6*j]-0.05), 0,   afact*h};
+    p2[k+6*j] = newp;  Point(p2[k+6*j]) = {(eps/3)*(cx[k+6*j]+0.5), (eps/3)*(cy[k+6*j]+0.05), 0,   afact*h};
+    p3[k+6*j] = newp;  Point(p3[k+6*j]) = {(eps/3)*(cx[k+6*j]-0.5), (eps/3)*(cy[k+6*j]+0.05), 0,   afact*h};
+    If(phi[k+6*j] != 0)
+      Rotate { {0, 0, 1}, { (eps/3)*cx[k+6*j], (eps/3)*cy[k+6*j], 0},  phi[k+6*j] } {Point{p0[k+6*j],p1[k+6*j],p2[k+6*j],p3[k+6*j]}; }
+    EndIf
+
+    // affine mapping to OMe
+    //Dilate { {0, 0, 0}, eps } { Point{p0[k+6*j],p1[k+6*j],p2[k+6*j],p3[k+6*j]}; }
+    If(xtrans != 0)
+      Translate { xtrans, 0, 0 } { Point{p0[k+6*j],p1[k+6*j],p2[k+6*j],p3[k+6*j]}; } 
+    EndIf
+
+    l0[k+6*j] = newl;  Line(l0[k+6*j]) = {p3[k+6*j],p2[k+6*j]};
+    l1[k+6*j] = newl;  Line(l1[k+6*j]) = {p2[k+6*j],p1[k+6*j]};
+    l2[k+6*j] = newl;  Line(l2[k+6*j]) = {p1[k+6*j],p0[k+6*j]};
+    l3[k+6*j] = newl;  Line(l3[k+6*j]) = {p0[k+6*j],p3[k+6*j]};
+
+  EndFor // k
+  EndFor // j
+
+  theloops[t] = newll;
+  Line Loop(theloops[t]) = {l0[0],l1[0],l2[0],l3[0],l0[1],l1[1],l2[1],l3[1],l0[2],l1[2],l2[2],l3[2],l0[3],l1[3],l2[3],l3[3],l0[4],l1[4],l2[4],l3[4],l0[5],l1[5],l2[5],l3[5],l0[6],l1[6],l2[6],l3[6],l0[7],l1[7],l2[7],l3[7],l0[8],l1[8],l2[8],l3[8],l0[9],l1[9],l2[9],l3[9],l0[10],l1[10],l2[10],l3[10],l0[11],l1[11],l2[11],l3[11]};
+  
+  Printf("Script  : Line Loop(theloops[%g]) generated.", t);
+
+Return
+

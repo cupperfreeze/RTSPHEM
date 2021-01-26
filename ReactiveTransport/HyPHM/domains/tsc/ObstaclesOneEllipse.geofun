@@ -1,0 +1,38 @@
+//! @file ObstaclesOneEllipse.geofun Definition of the Gmsh function ObstaclesOneEllipse which returns a Line Loop(theloops[t]).
+//! Input arguments ie variables which have to be previously defined are: t, h, eps, xtrans
+
+Function Obstacles // input: t, eps, xtrans   output: Line Loop(theloops[t])
+
+  // rotation angle and radii of the ellipse
+  phi =  Pi/4; 
+  ra = 1/3;
+  rb = 1/6;
+
+    p0 = newp;   Point(p0) = {0.5,    0.5,    0, 1};
+    p1 = newp;   Point(p1) = {0.5-ra, 0.5,    0, 1};
+    p2 = newp;   Point(p2) = {0.5,    0.5+rb, 0, 1};
+    p3 = newp;   Point(p3) = {0.5+ra, 0.5,    0, 1};
+    p4 = newp;   Point(p4) = {0.5,    0.5-rb, 0, 1};
+    Rotate { {0, 0, 1}, { 0.5, 0.5, 0},phi } {Point{p1,p2,p3,p4}; }
+
+    // affine mapping to OMe
+    Dilate { {0, 0, 0}, eps } { Point{p0,p1,p2,p3,p4}; }
+    If(xtrans != 0)
+      Translate { xtrans, 0, 0 } { Point{p0,p1,p2,p3,p4}; } 
+    EndIf
+
+  //  e0 = newreg; Ellipse(e0) = {p1,p0,p1,p2};
+  //  e1 = newreg; Ellipse(e1) = {p2,p0,p2,p3};
+  //  e2 = newreg; Ellipse(e2) = {p3,p0,p3,p4};
+  //  e3 = newreg; Ellipse(e3) = {p4,p0,p4,p1};
+    sp = newreg; Spline(sp)  = {p1,p2,p3,p4,p1};
+
+    // remove center of the ellipse
+ //   Delete { Point{p0}; } // This has unfortunately no effect, since p0 is used as control point :(.
+
+  theloops[t] = newreg; Line Loop(theloops[t]) = {sp};
+  
+  Printf("Script  : Line Loop(theloops[%g]) generated.", t);
+
+Return
+

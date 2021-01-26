@@ -1,0 +1,37 @@
+//! @file ObstaclesTwoRectangles.geofun Definition of two rectangles on a square.
+
+Function Obstacles // input: t, eps, xtrans   output: Line Loop(theloops[t])
+
+  // centers of strips
+  cx[0] = 0.6; cy[0] = 0.25; phi[0] =  0.2;  // M1
+  cx[1] = 0.4; cy[1] = 0.7;  phi[1] = -0.7;  // M2
+
+  For k In {0:1} // 2 obstacles
+
+    p0[k] = newp;  Point(p0[k]) = {eps*(cx[k]-0.3), eps*(cy[k]-0.03), 0,   h};
+    p1[k] = newp;  Point(p1[k]) = {eps*(cx[k]+0.3), eps*(cy[k]-0.03), 0,   h};
+    p2[k] = newp;  Point(p2[k]) = {eps*(cx[k]+0.3), eps*(cy[k]+0.03), 0,   h};
+    p3[k] = newp;  Point(p3[k]) = {eps*(cx[k]-0.3), eps*(cy[k]+0.03), 0,   h};
+    If(phi[k] != 0)
+      Rotate { {0, 0, 1}, { eps*cx[k], eps*cy[k], 0},  phi[k] } {Point{p0[k],p1[k],p2[k],p3[k]}; }
+    EndIf
+
+    // affine mapping to OMe
+    //Dilate { {0, 0, 0}, eps } { Point{p0[k],p1[k],p2[k],p3[k]}; }
+    If(xtrans != 0)
+      Translate { xtrans, 0, 0 } { Point{p0[k],p1[k],p2[k],p3[k]}; } 
+    EndIf
+
+    l0[k] = newl;  Line(l0[k]) = {p3[k],p2[k]};
+    l1[k] = newl;  Line(l1[k]) = {p2[k],p1[k]};
+    l2[k] = newl;  Line(l2[k]) = {p1[k],p0[k]};
+    l3[k] = newl;  Line(l3[k]) = {p0[k],p3[k]};
+  EndFor // k
+
+  theloops[t] = newll;
+  Line Loop(theloops[t]) = {l0[0],l1[0],l2[0],l3[0],l0[1],l1[1],l2[1],l3[1]};
+  
+  Printf("Script  : Line Loop(theloops[%g]) generated.", t);
+
+Return
+

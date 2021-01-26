@@ -1,0 +1,24 @@
+//! @file Rectangle.geofun Definition of the Gmsh function Rectangle which returns a Line Loop(theloops[0]).
+//! Input arguments ie variables which have to be previously defined are: xmin, xmax, ymin, ymax
+
+
+
+Function Rectangle
+
+Include "tsc_epsilon.geo";   // scaling parameter eps
+Include "tsc_meshwidth.geo"; // the mesh width h 
+
+pll = newp; Point(pll) = {xmin, ymin, 0,   h*eps};
+plr = newp; Point(plr) = {xmax, ymin, 0,   h*eps};
+pur = newp; Point(pur) = {xmax, ymax, 0,   h*eps};
+pul = newp; Point(pul) = {xmin, ymax, 0,   h*eps};
+
+bdry1 = newreg; Line(bdry1)  = {pll, plr};
+bdry2 = newreg; Line(bdry2)  = {plr, pur};
+bdry3 = newreg; Line(bdry3)  = {pur, pul};
+bdry4 = newreg; Line(bdry4)  = {pul, pll};
+
+theloops[0] = newreg;
+Line Loop(theloops[0]) = {bdry1,bdry2,bdry3,bdry4}; // edge IDs will be 1 to 4
+
+Return

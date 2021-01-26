@@ -1,0 +1,51 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//! @page installation Installation Notes and Troubleshooting
+//!
+//! <h2>Getting Started</h2>
+//! - If you are an <i>extern user</i> but have an account at the Chair of Applied Mathematics, Erlangen, you can get a local
+//!   copy of HyPHM using subversion via
+//!   @code
+//!   svn co svn+ssh://[username]@fauamlx5f.am.uni-erlangen.de/home/am1ug/SVN/HyPHM/trunk HyPHM.local
+//!   @endcode
+//!   <i>Local users</i> within the network may use a direct link:
+//!   @code
+//!   svn co file:///home/am1ug/SVN/HyPHM/trunk HyPHM.local
+//!   @endcode
+//! - A matlab version newer than 2009b is required.
+//! - To enable the documentation doxygen (@ref doxygen) has to be installed
+//!   and in the system path and 
+//!   the pearl script ./opt/DoxygenMatlab/m2cpp.pl
+//!   has to be executable (<code>$ chmod u+x m2cpp.pl</code>).
+//!   The documentation (<code>HyPHM.local/doc/html/index.html</code>) can then be generated with the Matlab command
+//!   @code
+//!   HyPHM doc
+//!   @endcode
+//! - Get @ref gmsh, which is included in many distros.  @ref gmsh must be in the path.
+//!
+//!
+//! <h2>Troubleshooting</h2>
+//! - If the following error message appears when generating a grid
+//!   @code
+//!   HyPHM: Something went wrong, the .mesh file is damaged.  Please check the Gmsh log message.
+//!   @endcode
+//!   it may be, that gmsh is not in the Matlab path.  To check this, type 
+//!   @code
+//!   unix('gmsh')
+//!   @endcode
+//!   and check the output.  If you receive '<code>gmsh: Command not found.</code>' then gmsh is not in the environment PATH (check this
+//!   via '<code>getenv('PATH')</code>' in Matlab).  You have to locate <code>gmsh</code> (e.g. by '<code>which gmsh</code>' in the terminal) and add the referring path to the environment path by
+//!   @code
+//!   setenv('PATH', [getenv('PATH'), ':/path/to/gmshexecutable'])
+//!   @endcode
+//! - If the following error message appears when generating a grid
+//!   @code
+//!   gmsh: /usr/local/MATLAB/R2010a/sys/os/glnxa64/libstdc++.so.6: version `GLIBCXX_3.4.11' not found (required by /usr/lib/libTKSTEPBase-6.3.0.so)
+//!   @endcode
+//!   go to the glnxa64 directory and delete <code>libstdc++.so.6*</code> or rename the files.
+//!   Matlab will automatically use Your correctly working system libraries instead. 
+//! - If you receive
+//!   @code
+//!   BLAS loading error: cannot open with static TLS
+//!   @endcode
+//!   you encountered a Matlab bug.  See http://stackoverflow.com/questions/19268293/matlab-error-cannot-open-with-static-tls for workarounds.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

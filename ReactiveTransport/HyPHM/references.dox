@@ -1,0 +1,49 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//! @page references References
+//!
+//! @section BC2005 [BC2005]
+//! Bahriawati, C. and C. Carstensen [2005]: &ldquo;Three Matlab Implementations of the
+//! lowest-order Raviart&ndash;Thomas MFEM with a Posteriori Error Control.&rdquo; In:
+//! Computational Methods in Applied Mathematics 5.4, pp. 333&ndash;361.
+//! 
+//! @section ESW2005 [ESW2005]
+//! Elman, H., D. Silvester and A. Wathen [2005]: &ldquo;Finite Elements and Fast 
+//! Iterative Solvers with Applications in Incompressible Fluid Dynamics&rdquo;.
+//! Oxford University Press, ISBN: 978-0-19-852868-5.
+//!
+//! @section EG2000 [EG2000]
+//! Ern, A. and J.-L. Guermond [2000]: &ldquo;Theory and Practice of Finite Elements&rdquo;.
+//! Applied Mathematical Sciences, Springer.
+//!
+//! @section Frank2013 [Frank2013]
+//! Frank, F. [2013]: &ldquo;Numerical Studies of Models for Electrokinetic Flow and 
+//! Charged Solute Transport in Periodic Porous Media&rdquo;. PhD thesis. Friedrich&ndash;Alexander&ndash;University of Erlangen&ndash;Nuremberg.
+//! (http://opus4.kobv.de/opus4-fau/frontdoor/index/index/docId/4025)
+//!
+//! @section FRK2011 [FRK2011]
+//! Frank F., N. Ray, P. Knabner [2011]: &ldquo;Numerical Investigation of Homogenized Stokes&ndash;Nernst&ndash;Planck&ndash;Poisson Problems&rdquo;.
+//! Computing and Visualization in Science (Springer, DOI: 10.1007/s00791-013-0189-0).
+//!
+//! @section RBPA2008 [RBPA2008]
+//! Radu, F. et al. [2008]: &ldquo;A Mixed Hybrid Finite Element Discretization Scheme for
+//! Reactive Transport in Porous Media.&rdquo; In: Numerical Mathematics and Advanced
+//! Applications, pp. 513&ndash;520.
+//! 
+//! @section REMK2011 [REMK2011]
+//! Ray, N. et al. [2011]:  &ldquo;Rigorous Homogenization of a Stokes&ndash;Nernst&ndash;Planck&ndash;Poisson Problem for various Boundary Conditions.&rdquo;
+//! In: Casa report 11&ndash;55, pp. 1&ndash;32.  Netherlands: TU Eindhoven.
+//!
+//! @section Schmuck2008 [Schmuck2008]
+//! Schmuck, M. [2008]: &ldquo;Modeling, Analysis, and Numerics in Electrohydrodynamics.&rdquo;
+//! PhD thesis. Swiss: ETH Zurich.
+//!
+//! @section Schneid2000 [Schneid2000]
+//! Schneid, E. [2000]: &ldquo;Hybrid-Gemischte Finite-Elemente-Diskretisierung der
+//! Richards-Gleichung.&rdquo; PhD thesis. Germany: Friedrich&ndash;Alexander&ndash;University
+//! of Erlangen&ndash;Nuremberg.
+//!
+//! @section SPJF2004 [SPJF2004]
+//! Smith D. et al. [2004]:  &ldquo;Theoretical Analysis of Anion Exclusion and Diffusive Transport Through Platy-Clay Soils.&rdquo;
+//! In: Transport in Porous Media, 57(3), pp. 251&ndash;277.
+//!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

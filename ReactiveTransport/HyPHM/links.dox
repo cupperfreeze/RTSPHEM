@@ -1,0 +1,20 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//! @page links Links
+//!
+//! @section doxygen Doxygen
+//! Doxygen is a documentation generator for the programming languages C, C++, C#, Fortran, Java [...] Doxygen is a tool for writing software reference documentation. The documentation is written within code, and is thus relatively easy to keep up to date. Doxygen can cross reference documentation and code, so that the reader of a document can easily refer to the actual code. [wikipedia.org] <br>
+//! http://www.stack.nl/~dimitri/doxygen<p>
+//! To parse the Matlab files to temporary C++ files required by doxygen, we use a package provided by Fabrice: http://www.mathworks.com/matlabcentral/fileexchange/25925-using-doxygen-with-matlab .
+//!
+//! @section gmsh Gmsh
+//! Gmsh is a finite element mesh generator developed by Christophe Geuzaine and Jean-Fran&ccedil;ois Remacle. Released under the GNU General Public License (with an exception to allow linking with other specific mesh generators), Gmsh is free software. Gmsh contains 4 modules, for solving, geometry, meshing, and post-processing. Gmsh also supports parametric input, and has an advanced visualization mechanism. [wikipedia.org] <br>
+//! http://www.geuz.org/gmsh
+//!
+//! @section paraview ParaView
+//! ParaView is an open source, freely available program for parallel, interactive, scientific visualization. It has a client-server architecture to facilitate remote visualization of datasets, and generates level of detail (LOD) models to maintain interactive framerates for large datasets. It is an application built on top of the Visualization Tool Kit (VTK) libraries. Where VTK is a set of libraries that provide visualization services for data, task, and pipeline parallelism, ParaView is an application designed for data parallelism on shared-memory or distributed-memory multicomputers and clusters. It can also be run as a single-computer application. [wikipedia.org] <br>
+//! http://www.paraview.org
+//! 
+//! @section mayavi MayaVi2
+//! http://mayavi.sourceforge.net
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

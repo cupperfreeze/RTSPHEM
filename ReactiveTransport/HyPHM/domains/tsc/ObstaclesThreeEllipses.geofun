@@ -1,0 +1,47 @@
+//! @file ObstaclesThreeEllipses.geofun Definition of the Gmsh function ObstaclesThreeEllipses which returns a Line Loop(theloops[t]).
+//! Input arguments ie variables which have to be previously defined are: t, h, eps, xtrans
+
+Function Obstacles // input: t, eps, xtrans   output: Line Loop(theloops[t])
+
+  // midpoints and rotation angles of ellipses 0 to 2
+  cx[0] = 1/4;  cy[0] = 2/3;  phi[0] =  Pi/4; 
+  cx[1] = 1/2;  cy[1] = 1/4;  phi[1] = -Pi/4;
+  cx[2] = 3/4;  cy[2] = 2/3;  phi[2] =  Pi/2;
+     
+  // radii of ellipses (constant)
+  ra = 1/4;
+  rb = 1/8;
+
+  For k In {0:2}
+
+    p0 = newp;   Point(p0) = {cx[k],    cy[k],    0, 1};
+    p1 = newp;   Point(p1) = {cx[k]-ra, cy[k],    0, 1};
+    p2 = newp;   Point(p2) = {cx[k],    cy[k]+rb, 0, 1};
+    p3 = newp;   Point(p3) = {cx[k]+ra, cy[k],    0, 1};
+    p4 = newp;   Point(p4) = {cx[k],    cy[k]-rb, 0, 1};
+    Rotate { {0, 0, 1}, { cx[k], cy[k], 0}, phi[k] } {Point{p1,p2,p3,p4}; }
+
+    // affine mapping to OMe
+    Dilate { {0, 0, 0}, eps } { Point{p0,p1,p2,p3,p4}; }
+    If(xtrans != 0)
+      Translate { xtrans, 0, 0 } { Point{p0,p1,p2,p3,p4}; } 
+    EndIf
+
+    e0[k] = newreg; Ellipse(e0[k]) = {p1,p0,p1,p2};
+    e1[k] = newreg; Ellipse(e1[k]) = {p2,p0,p2,p3};
+    e2[k] = newreg; Ellipse(e2[k]) = {p3,p0,p3,p4};
+    e3[k] = newreg; Ellipse(e3[k]) = {p4,p0,p4,p1};
+
+    // remove center of ellipses
+    Delete {
+      Point{p0};
+    }
+
+  EndFor
+
+  theloops[t] = newreg; Line Loop(theloops[t]) = {e0[0],e1[0],e2[0],e3[0],e0[1],e1[1],e2[1],e3[1],e0[2],e1[2],e2[2],e3[2]};
+  
+  Printf("Script  : Line Loop(theloops[%g]) generated.", t);
+
+Return
+
