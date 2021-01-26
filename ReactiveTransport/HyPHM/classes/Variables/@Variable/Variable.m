@@ -455,7 +455,7 @@ classdef Variable < hgsetget & handle
             z = w.packages;
             if ~any(ismember(z, type))
                 printline(2, 'There are the following Variable types:')
-                dir ./ classes / Variables / + *
+                dir ./classes/Variables/+*
                 error('HyPHM: Type ''%s'' not implemented.', type)
             end
         end

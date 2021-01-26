@@ -62,7 +62,7 @@ if run == 0
         datagF = transport.gF.getdata(stepper.curstep);
 
         if (isa(transport, 'TransportLEVEL'))
-            [markDirE, neumannCells{i}, markFluxE, markFreeE, ~, idxNeumE, ~, ~ markDirT] = ...
+            [markDirE, neumannCells{i}, markFluxE, markFreeE, ~, idxNeumE, ~, ~, markDirT] = ...
                 transport.tp_indexsets();
             markNotDirT = ~markDirT;
         else
