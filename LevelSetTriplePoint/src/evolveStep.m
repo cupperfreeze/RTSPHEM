@@ -35,8 +35,9 @@ parfor index = 1:numberOfSlices
     cellGrid = microCell.cellGrid;
     distFunctions = microCell.distFunctions{index};
     reInit = microCell.reInit(index);
+    interfaceLength = microCell.interfaceLength{index};
 
-    %Adaptivity sche,e
+    %Adaptivity scheme
     localadapS{index} = interfaceVelocities{index} * curtau + microCell.adapS{index};
     localadapTime{index} = microCell.adapTime{index} + curtau;
 
@@ -75,8 +76,10 @@ parfor index = 1:numberOfSlices
 
         end
 
+        [interfaceLength, ~] = evaluateInterface(cellGrid, Xi, distFunctions, true);
+
     end
-    [interfaceLength, coordTripel] = evaluateInterface(cellGrid, Xi, distFunctions, true);
+  
     localinterfaceLength{index} = interfaceLength(1:2);
     localreInit{index} = reInit;
     localPhi{index} = Phi;

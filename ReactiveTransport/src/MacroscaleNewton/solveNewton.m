@@ -10,7 +10,7 @@ if numel(Solver) == 0 | ~ismember(Solver, {'StandardDirect', 'ilupack', 'BlockPr
     disp('Use standard direct solver');
 end
 
-if  ~ismember(Solver, { 'ilupack', 'BlockPrec'})
+if  ismember(Solver, { 'ilupack', 'BlockPrec'})
     try
        AMGinit(sparse(1));
     catch
@@ -19,7 +19,7 @@ if  ~ismember(Solver, { 'ilupack', 'BlockPrec'})
     end
 end
 
-if  ~ismember(Solver, {'BlockPrec'})
+if  ismember(Solver, {'BlockPrec'})
     try
        iluk(sparse(1),1);
     catch

@@ -93,8 +93,8 @@ classdef FoldedGrid < AbstractGrid
             %         this.mapE(iRectEdge) = idx;
             %       end
 
-            [~ idx] = ismember(this.mapV(this.rectGrid.V0E(:, 1:2)), this.V0E(:, 1:2), 'rows'); %improved SG
-            [~ idx2] = ismember(this.mapV(this.rectGrid.V0E(:, 1:2)), this.V0E(:, [2, 1]), 'rows');
+            [~, idx] = ismember(this.mapV(this.rectGrid.V0E(:, 1:2)), this.V0E(:, 1:2), 'rows'); %improved SG
+            [~, idx2] = ismember(this.mapV(this.rectGrid.V0E(:, 1:2)), this.V0E(:, [2, 1]), 'rows');
             idx(idx == 0) = idx2(idx == 0);
             this.mapE(:) = idx;
 
