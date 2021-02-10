@@ -524,7 +524,7 @@ while transportStepper.next
             numberOfSlicesX, numberOfSlicesY, timeIterationStep+1, lengthXAxis, lengthYAxis);
         porosityFunc = @(t, x) porosityHelperFun(t, x, porosities, numberOfSlicesX, numberOfSlicesY, timeIterationStep+1, ...
             lengthXAxis, lengthYAxis);
-        darcy.D.setdata(@(t, x) permeabilityFunc(t, x)./dynamicViscosity);
+        darcy.D.setdata(1,@(t, x) permeabilityFunc(t, x)./dynamicViscosity);
         flowStepper.next;
         darcy.computeLevel('s');
 
