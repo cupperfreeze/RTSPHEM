@@ -28,13 +28,13 @@ LEVELS1{1} = levelSet;
 LEVELS2{1} = levelSet;
 tic
 for i = 1:(steps - 1)
-    LEVELS1{i+1} = levelSetEquationTimeStep(stepsize, LEVELS1{i}, 0, LEVELS1{i}, cellGrid, speed, 1);
+    LEVELS1{i+1} = levelSetEquationTimeStep(stepsize, 0, LEVELS1{i}, cellGrid, speed, 1);
 end
 toc
 
 tic
 for i = 1:(steps - 1)
-    LEVELS2{i+1} = levelSetEquationTimeStep(stepsize, LEVELS2{i}, 0, LEVELS2{i}, cellGrid, speed);
+    LEVELS2{i+1} = levelSetEquationTimeStep(stepsize, 0, LEVELS2{i}, cellGrid, speed);
 end
 toc
 l = -0.5:1 / numPartitions:0.5;
