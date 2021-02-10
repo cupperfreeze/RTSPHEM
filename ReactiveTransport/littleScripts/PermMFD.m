@@ -4,7 +4,7 @@ global EPS
 
 scale = 30; % number of solid inclusions per dimension
 dimension = 2;
-numPartitions = 1000; % grid resolution
+numPartitions = 500; % grid resolution
 cellGrid = FoldedCartesianGrid(dimension, ...
     kron(ones(1, dimension), [-0.5, 0.5]), ...
     numPartitions*ones(1, dimension));
