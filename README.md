@@ -128,7 +128,7 @@ Please report any bugs or improvement suggestions to Stephan Gärttner, Friedric
   Title                    = {RTSPHEM -- Reactive Transport Solver in Porous Homogenized Evolving Media},
   Author                   = {Stephan G\"arttner and Florian Frank},
   Url                      = {https://github.com/cupperfreeze/RTSPHEM/},
-  DOI                      = {XXX},
+  DOI                      = {10.5281/zenodo.5166669},
   Year                     = {2021},
   Note                     = {Accessed: XXX},
   Organization             = {Department Mathematik, Friedrich-Alexander-Universit\"at Erlangen-N\"urnberg}
