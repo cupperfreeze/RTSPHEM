@@ -118,7 +118,7 @@ if ~slt
     out(Xi == 1) = 0;
     out(Xi == 2) = -0.5;
     out(Xi == 3) = -1;
-    %surf(reshape(coord(:,1),temp,temp),reshape(coord(:,2),temp,temp),reshape(out,temp,temp),'EdgeColor','none');
+    surf(reshape(coord(:,1),temp,temp),reshape(coord(:,2),temp,temp),reshape(out,temp,temp),'EdgeColor','none');
     colormap('gray');
     set(gca, 'Layer', 'top')
     scatter(coordTripel(:, 1), coordTripel(:, 2), 100, 'MarkerFaceColor', [0, .7, .7]);
