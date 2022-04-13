@@ -1,5 +1,6 @@
 % Simple test script for 2 mineral dissolution without VIIM at the
 % porescale
+% cf. [4] Section 4.2
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -58,10 +59,10 @@ fprintf(['Peclet number: ', num2str(pecletNumber), '\n']);
 
 % dt_macro = 1 * 3600; % Pe = 5000
 % initialMacroscaleTimeStepSize = 160; % Pe = 50
-initialMacroscaleTimeStepSize = 10;
+initialMacroscaleTimeStepSize = 30;
 % dt_micro = dt_macro / 100; % 0;
 
-endTime = 1 * 3600 * 600; % [h] Pe = 5000
+endTime = 14 * 3600 * 600; % [h] Pe = 5000
 % endTime = 10 * 60 * 60; % Pe = 50
 % endTime = 200 * dt_macro;
 
@@ -89,8 +90,8 @@ switch (timeStepperType)
         end
 
     case 'expmax'
-        maximalStep = 0.8 * 10^5;
-        timeStepSizeFactor = 2;
+        maximalStep = 0.8 * 10^6;
+        timeStepSizeFactor = 3;
         timeSteps = [0, initialMacroscaleTimeStepSize];
         while timeSteps(end) < endTime
             timeSteps = [timeSteps, min(timeSteps(end) * timeStepSizeFactor, timeSteps(end) + maximalStep)];

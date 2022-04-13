@@ -46,7 +46,12 @@ isTrialPos = false(numel(Distance), 1);
 isTrialPos(~isinf(positiveDist) & positiveDist > 0) = true;
 
 
-neighborIndices = [grid.pull{1, 1, 1}, grid.pull{2, 1, 1}, grid.pull{1, 1, 2}, grid.pull{2, 1, 2}]';
+switch grid.dimension
+    case 2
+        neighborIndices = [grid.pull{1,1,1},grid.pull{2,1,1},grid.pull{1,1,2},grid.pull{2,1,2}]';
+    case 3
+        neighborIndices = [grid.pull{1,1,1},grid.pull{2,1,1},grid.pull{1,1,2},grid.pull{2,1,2},grid.pull{1,1,3},grid.pull{2,1,3}]';
+end
 
 h = grid.stepSize;
 dim = grid.dimension;

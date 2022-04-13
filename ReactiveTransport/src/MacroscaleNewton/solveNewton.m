@@ -4,8 +4,9 @@ function sol = solveNewton(M, b, iteration, numTransportVariables, varargin)
 global Solver
 persistent PREC PREC1 PREC2
 persistent options pl pr Dl Dr
+persistent levs
 
-if numel(Solver) == 0 | ~ismember(Solver, {'StandardDirect', 'ilupack', 'BlockPrec', 'StandardIterative'})
+if numel(Solver) == 0 | ~ismember(Solver, {'StandardDirect', 'ilupack', 'BlockPrec', 'StandardIterative', 'ilukIterative'})
     Solver = 'StandardDirect'; %default choice
     disp('Use standard direct solver');
 end
@@ -19,9 +20,9 @@ if  ismember(Solver, { 'ilupack', 'BlockPrec'})
     end
 end
 
-if  ismember(Solver, {'BlockPrec'})
+if  ismember(Solver, {'BlockPrec','ilukIterative'})
     try
-       iluk(sparse(1),1);
+       [~,~]=iluk(sparse(1),1);
     catch
         warning('Solver option requested requires iluk, switching to Standard solver');
         Solver = 'StandardDirect';
@@ -129,6 +130,14 @@ switch Solver
 
         [PREC1, PREC2] = ilu(M);
         [sol] = bicgstab(M, b, 2*10^(-2), 300, PREC1, PREC2);
+        
+    case 'ilukIterative'
+        if iteration == 0
+            [l, u, levs] = iluk(M, 2);
+        else
+            [l, u] = iluk(M, [], levs); 
+        end
+        sol = bicgstab(M, b, 4*10^(-2), 400, l, u);
 end
 
     function help = solvePREC(PREC1, PREC2, rhs, m)

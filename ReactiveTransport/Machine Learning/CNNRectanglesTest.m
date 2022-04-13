@@ -1,4 +1,5 @@
 % Script to evaluate CNN prediction quality on SPE10 geometries
+% cf. [2] Section 5.3
 
 calculated = zeros(440, 15); % Stokes calculated permeabilities
 predicted = zeros(2, 440, 15); % CNN predicted permeabilities

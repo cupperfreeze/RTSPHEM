@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Same simulation as in 'Two_Min_TripelDataSet' but with all permeability
 %calculations performed by  a CNN
+%cf. [2] Section 5.3
 
 %% General setting variables
 allTime = tic;
@@ -222,10 +223,14 @@ parfor (i = 1:numberOfSlices) %, numProc)
         = computeDiffusionTensor(microscaleGridCoarse, SOL, triangleVolumes);
     diffusionTensors{i}(:, 1) = diffusion(:);
     % porosities{i}(1) = porosity;
-    surfaceArea{i}{1}(1) = microCells.interfaceLength{i}(1);
-    surfaceArea{i}{2}(1, 1) = microCells.interfaceLength{i}(1, 2);
 
 end
+
+for (i = 1:numberOfSlices)
+    surfaceArea{i}{1}(1) = microCells.interfaceLength{i}(1);
+    surfaceArea{i}{2}(1, 1) = microCells.interfaceLength{i}(1, 2);
+end
+
 timeDiff = timeDiff + toc;
 
 tic
@@ -532,8 +537,6 @@ while transportStepper.next
     help2 = zeros(numel(index1), 1);
     help3 = zeros(numel(index1), 4);
     help4 = zeros(numel(index1), 4);
-    help5 = zeros(numel(index1), 1);
-    help6 = zeros(numel(index1), 1);
     help7 = zeros(64, 64, 1, 2*numel(index1));
     coarseLevel = zeros(numPartitionsMicroscaleCoarse+1, numPartitionsMicroscaleCoarse+1, numel(index1));
 
@@ -556,8 +559,6 @@ while transportStepper.next
         help3(ind, :) = diffusion(:);
         %             porosities{i}( timeIterationStep ) = porosity;
 
-        help5(ind) = microCells.interfaceLength{i}(microCells.memoryStep, 1);
-        help6(ind) = microCells.interfaceLength{i}(microCells.memoryStep, 2);
     end
     timeDiff = timeDiff + toc;
 
@@ -584,8 +585,8 @@ while transportStepper.next
         porosities{i}(timeIterationStep + 1) = help2(ind);
         diffusionTensors{i}(:, timeIterationStep + 1) = help3(ind, :);
         permeabilityTensors{i}(:, timeIterationStep + 1) = help4(ind, :);
-        surfaceArea{i}{1}(timeIterationStep + 1, 1) = help5(ind);
-        surfaceArea{i}{2}(timeIterationStep + 1, 1) = help6(ind);
+        surfaceArea{i}{1}(timeIterationStep + 1, 1) = microCells.interfaceLength{i}(microCells.memoryStep, 1);
+        surfaceArea{i}{2}(timeIterationStep + 1, 1) = microCells.interfaceLength{i}(microCells.memoryStep, 2);
     end
 
     % copy old data where update not needed

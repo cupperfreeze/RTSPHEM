@@ -14,6 +14,8 @@ DiscIndizes = Inf(dim, numel(updateIndex)); %Index in gradient discretization, 1
 backForthIndizes = cell(dim, 1); %Index of neighbor node
 for i = 1:dim
     backForthIndizes{i} = Inf(2, numel(updateIndex));
+    backForthIndizes{i}(1, :) = neighborIndices(2+2*(dimensions(i) - 1), updateIndex);
+    backForthIndizes{i}(2, :) = neighborIndices(1+2*(dimensions(i) - 1), updateIndex);
 end
 
 for d = 1:dim
@@ -24,9 +26,8 @@ for d = 1:dim
         forwardIndex = neighborIndices(1+2*(dimensions(d) - 1), updateIndex(n));
 
 
-        backForthIndizes{d}(1, n) = backwardIndex;
-
-        backForthIndizes{d}(2, n) = forwardIndex;
+        %backForthIndizes{d}(1,n) = backwardIndex;
+        %backForthIndizes{d}(2,n) = forwardIndex;
 
         if (backwardIndex < 0.5)
             distBackward = Inf;
@@ -163,8 +164,7 @@ end
 
 % If lower dimensional update did improve, incorporate
 newDistance = min(distance(updateIndex), newDist);
-GotUpdated = distance(updateIndex) > newDist + 0 * 10^(-15);
-NeworthogonalS = newOrthS(GotUpdated);
+NeworthogonalS = newOrthS;
 
 
 end

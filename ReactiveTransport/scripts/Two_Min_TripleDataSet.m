@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Reactive Transport Simulation based on permeability data from SPE10
 %project
+%cf. [2] Section 5.2
 
 allTime = tic; % 6095.287995 seconds
 %
@@ -239,9 +240,12 @@ parfor (i = 1:numberOfSlices) %, numProc)
         = computeDiffusionTensor(microscaleGridCoarse, SOL, triangleVolumes);
     diffusionTensors{i}(:, 1) = diffusion(:);
     % porosities{i}(1) = porosity;
+end
+for (i = 1:numberOfSlices) 
     surfaceArea{i}{1}(1) = microCells.interfaceLength{i}(1);
     surfaceArea{i}{2}(1, 1) = microCells.interfaceLength{i}(1, 2);
 end
+
 timeDiff = timeDiff + toc;
 
 % calculate permeability
@@ -532,8 +536,7 @@ while transportStepper.next
     help2 = zeros(numel(index1), 1);
     help3 = zeros(numel(index1), 4);
     help4 = zeros(numel(index1), 4);
-    help5 = zeros(numel(index1), 1);
-    help6 = zeros(numel(index1), 1);
+ 
     for (ind = 1:numel(index1))
         i = index1(ind);
         coarseLevel(:, :, ind) = interp2(X, Y, reshape(microCells.signed{i}(:, microCells.memoryStep), numPartitionsMicroscale + 1, numPartitionsMicroscale + 1), Xcoarse, Ycoarse);
@@ -555,8 +558,6 @@ while transportStepper.next
         help3(ind, :) = diffusion(:);
         %             porosities{i}( timeIterationStep ) = porosity;
 
-        help5(ind) = microCells.interfaceLength{i}(microCells.memoryStep, 1);
-        help6(ind) = microCells.interfaceLength{i}(microCells.memoryStep, 2);
     end
     timeDiff = timeDiff + toc;
 
@@ -575,8 +576,8 @@ while transportStepper.next
         porosities{i}(timeIterationStep + 1) = help2(ind);
         diffusionTensors{i}(:, timeIterationStep + 1) = help3(ind, :);
         permeabilityTensors{i}(:, timeIterationStep + 1) = help4(ind, :);
-        surfaceArea{i}{1}(timeIterationStep + 1, 1) = help5(ind);
-        surfaceArea{i}{2}(timeIterationStep + 1, 1) = help6(ind);
+        surfaceArea{i}{1}(timeIterationStep + 1, 1) = microCells.interfaceLength{i}(microCells.memoryStep, 1);
+        surfaceArea{i}{2}(timeIterationStep + 1, 1) = microCells.interfaceLength{i}(microCells.memoryStep, 2);
     end
     for i = index2' % copy old data
         diffusionTensors{i}(:, timeIterationStep + 1) = diffusionTensors{i}(:, timeIterationStep);

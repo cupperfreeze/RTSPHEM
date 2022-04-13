@@ -4,7 +4,7 @@ function [globalStiffness, rightHandSide, isDegreeOfFreedom, ...
 % Assemble FE system for 2D cell problems and return area of each triangle in fluid (triangleVolumes)
 % and length of interface contained in each triangle(triangleSurfaces).
 
-EPS = eps;
+EPS = 10*eps;
 
 assert(isa(grid, 'CartesianGrid'));
 isFoldedGrid = isa(grid, 'FoldedCartesianGrid');
@@ -166,10 +166,13 @@ for tri = find(CloseToInterface)'
 
             checkedEdge(e) = true;
 
-            %phiLeft = levelSet( grid.edges( e, 1 ) );
-            %phiRight = levelSet( grid.edges( e, 2 ) );
-            phiLeft = levelSet(grid.foldedIndex(grid.edges(e, 1)));
-            phiRight = levelSet(grid.foldedIndex(grid.edges(e, 2)));
+            if isFoldedGrid
+                phiLeft = levelSet(grid.foldedIndex(grid.edges(e, 1)));
+                phiRight = levelSet(grid.foldedIndex(grid.edges(e, 2)));
+            else
+                phiLeft = levelSet( grid.edges( e, 1 ) );
+                phiRight = levelSet( grid.edges( e, 2 ) );
+            end
 
             % Both nodes lie on the same side of the interface.
             if (phiLeft * phiRight > EPS^2)
@@ -188,8 +191,8 @@ for tri = find(CloseToInterface)'
             end
 
             interfaceEdgeCut(e) = phiLeft / (phiLeft - phiRight);
-
             assert(interfaceEdgeCut(e) > -EPS & interfaceEdgeCut(e) < 1+EPS);
+
 
             edgeCutPoints(e, :) = (1 - interfaceEdgeCut(e)) ...
                 * grid.coordinates(grid.edges(e, 1), :) + interfaceEdgeCut(e) ...

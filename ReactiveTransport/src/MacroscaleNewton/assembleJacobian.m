@@ -1,7 +1,7 @@
 function [jacobian] = ...
     assembleJacobian(transportVariablesHyPHM, ...
     nonlinearJacobianFunc, Qpasts, Upasts, Qold, Uold, run)
-%ASSEMBLEJACOBIAN Assemble jacobian and residuum for Newton solver
+%   ASSEMBLEJACOBIAN Assemble jacobian and residuum for Newton solver
 %   Generalizes the equations represented by class Transport of HyPHM to include
 %   nonlinear source terms on the right hand side, i.e. equations of the form
 %

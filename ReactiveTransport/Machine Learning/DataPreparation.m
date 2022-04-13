@@ -1,4 +1,5 @@
 % Script to obtain Training and Validation data sets from CT-Images
+% cf. [2] Section 5.3
 
 global EPS
 EPS = eps;

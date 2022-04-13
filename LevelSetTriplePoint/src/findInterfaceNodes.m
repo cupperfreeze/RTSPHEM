@@ -1,7 +1,7 @@
 function [isInitial] = findInterfaceNodes(grid, lsf)
 % Finds the nodes of a cartesian grid that are adjacent to the interface LSF=0.
 
-assert(isa(grid, 'CartesianGrid'), ...
+assert(isa(grid, 'CartesianGrid') || isa(grid, 'CartesianGrid3D'), ...
     'Argument not of class ''CartesianGrid''.');
 
 numNodes = grid.nodes;

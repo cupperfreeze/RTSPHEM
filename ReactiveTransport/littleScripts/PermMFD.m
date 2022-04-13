@@ -1,4 +1,5 @@
 % calculate permeability of a microfluidic device
+% cf. [4] Section 4.2
 
 global EPS
 

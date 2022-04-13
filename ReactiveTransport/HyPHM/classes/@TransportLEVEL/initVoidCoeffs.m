@@ -58,10 +58,18 @@ if isempty(this.gF)
     this.gF = Variable(this.grid, this.stepper, 'gF', 'P0E');
     this.gF.setdata(NaN(numE, 1));
 end
+if isempty(this.uR)
+   printline(~isSlt*3, 'Robin ambient data uR was not defined, initializing it by NaN (cautionary).')
+   this.uR  = Variable(this.grid, this.stepper, 'uR',  'P0E'); this.uR.setdata(NaN(numE, 1));
+end
+if isempty(this.rob)
+   printline(~isSlt*3, 'Robin constant rob was not defined, initializing it by NaN (cautionary).')
+   this.rob  = Variable(this.grid, this.stepper, 'rob',  'C'); this.rob.setdata(NaN);
+end  
 if isempty(this.L)
     % printline(~isSlt*3, 'Unknown L (LevelSet) was not defined, initializing it by zero for the initial step.')
     this.L = Variable(this.grid, this.stepper, 'L', 'P1');
-    this.L.setdata(0, zeros(numV, 1));
+    this.L.setdata(-ones(numV, 1));
 end
 
 end

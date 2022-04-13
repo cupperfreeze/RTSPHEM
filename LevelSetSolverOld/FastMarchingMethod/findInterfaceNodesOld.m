@@ -1,4 +1,4 @@
-function [isInitial] = findInterfaceNodes(grid, lsf)
+function [isInitial] = findInterfaceNodesOld(grid, lsf)
 % Finds the nodes of a cartesian grid that are adjacent to the interface LSF=0.
 
 assert(isa(grid, 'CartesianGrid'), ...

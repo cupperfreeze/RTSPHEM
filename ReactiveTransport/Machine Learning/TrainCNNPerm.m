@@ -1,5 +1,6 @@
 % Script to setup and train a convolutional neural network for permeability
 % prediction on porescale geometries
+% cf. [2] Section 5.3
 
 %import Data
 load('TrainCNNDataGeneral.mat', 'TrainingIm', 'TrainingData', 'ValidationData', 'ValidationIm');
@@ -12,13 +13,9 @@ TrainingData = cat(1, TrainingData(:, 1), TrainingData(:, 4));
 indexTraining = (TrainingData(1:end, 1) < 10 & TrainingData(1:end, 1) > 10^(-5));
 indexValidation = (ValidationData(1:end, 1) < 10 & ValidationData(1:end, 1) > 10^(-5));
 TrainingImRestr = (TrainingIm(:, :, 1, indexTraining));
-TrainingDataRestr = (TrainingDATA(indexTraining, 1));
+TrainingDataRestr = (TrainingData(indexTraining, 1));
 
 % build neural network by defining layer structure
-
-
-% maxPooling2dLayer(2,'Stride',2)
-
 
 layers = [; ...
     imageInputLayer([64, 64, 1]); ...
@@ -57,18 +54,18 @@ opts = trainingOptions('adam', ...
     'LearnRateDropFactor', 0.8, ...
     'LearnRateDropPeriod', 10, ...
     'ValidationFrequency', 50, ...
-    'ExecutionEnvironment', 'gpu', ...
+    'ExecutionEnvironment', 'cpu', ...
     'Shuffle', 'every-epoch', ...
     'Plots', 'training-progress', ...
-    'Verbose', true, 'ValidationData', {ValidationIm(:, :, 1, indexValidation), 0.9 + (0.1 * log(ValidationDiff(indexValidation, 1)))});
+    'Verbose', true, 'ValidationData', {ValidationIm(:, :, 1, indexValidation), 0.9 + (0.1 * log(ValidationData(indexValidation, 1)))});
 net = trainNetwork(single(TrainingImRestr), 0.9+0.1*log(TrainingDataRestr), layers, opts);
 
 %% Evaluate training success
 
 % calculate Rsquare value
-predicted = exp(10*(net.predict(ValidationIm(:, :, 1, index2)) - 0.9));
-val = ValidationData(index2, 1);
-Rsquare = 1 - sum((log(predicted)-real(log(ValidationData(indexValidation, 1)))).^2) / (sum((log(val)-mean(log(val))).^2))
+predicted = exp(10*(net.predict(ValidationIm(:, :, 1, indexValidation)) - 0.9));
+val = ValidationData(indexValidation, 1);
+Rsquare = 1 - sum((log(predicted)-real(log(val))).^2) / (sum((log(val)-mean(log(val))).^2))
 
 % plot correlation diagram
 plot(log(val), log(predicted), '.');

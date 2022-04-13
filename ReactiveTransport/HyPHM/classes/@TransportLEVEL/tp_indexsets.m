@@ -5,14 +5,17 @@
 %> @retval markDirE   [#E x 1 logical]
 %> @retval markNeumE  [#E x 1 logical]
 %> @retval markFluxE  [#E x 1 logical]
+%> @retval markRobinE [#E x 1 logical]
 %> @retval markFreeE  Dirichlet + inner edges [#E x 1 logical]
 %> @retval idxDirE
 %> @retval idxNeumE
 %> @retval idxFluxE
+%> @retval idxRobinE
 %> @retval idxFreeE
+%> @retval markDirT
 
 
-function [markDirE, markNeumE, markFluxE, markFreeE, idxDirE, idxNeumE, idxFluxE, idxFreeE, markDirT] = tp_indexsets(d)
+function [markDirE,markNeumE,markFluxE,markRobinE, markFreeE,idxDirE,idxNeumE,idxFluxE,idxRobinE, idxFreeE, markDirT] = tp_indexsets(d)
 
 g = d.grid;
 Level = d.L.getdata(d.stepper.curstep); %Level-set values at current time
@@ -48,6 +51,12 @@ end
 innerFluxE = markDirV(g.V0E(:, 1)) & markDirV(g.V0E(:, 2)); %both vertices of edge solid --> flux edge
 markFluxE = logical(innerFluxE+markFluxE); %total set of flux edges
 
+% Robin Edges
+markRobinE = false(g.numE, 1); % [#E x 1]
+for k = 1 : length(d.id2R)
+  markRobinE = logical(markRobinE + (d.id2R{k} == g.idE));
+end
+
 markFreeE = ~(markFluxE + markNeumE); %total set of free edges
 
 
@@ -58,6 +67,7 @@ markFreeE = ~(markFluxE + markNeumE); %total set of free edges
 idxDirE = find(markDirE)'; % [1 x #E]  % ordered  Dirichlet edge numbers
 idxFluxE = find(markFluxE)'; %    "       Flux          "
 idxNeumE = find(markNeumE)'; %    "     Neumann         "
+idxRobinE = find(markRobinE)'; %  "      Robin          "
 idxFreeE = find(markFreeE)'; %    "       Free          "
 
 

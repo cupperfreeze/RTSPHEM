@@ -1,4 +1,4 @@
-% Data related to Figure 11
+% Data related to [4] Figure 11
 % Script to evaluate the adaptivity scheme in the 'random porosity' example
 
 try

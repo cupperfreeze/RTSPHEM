@@ -38,7 +38,6 @@ classdef Variable < hgsetget & handle
     properties (SetAccess = protected) % only own and derived instances
         %> Underlying Grid.
         grid
-        grids %in case grid varies
         %> Underlying Stepper.
         stepper
         %> @brief Name of the discrete function space, see directory <code>classes/+Variables/</code>.
@@ -196,12 +195,14 @@ classdef Variable < hgsetget & handle
     properties % public access
         %> Description [string], exclusively used for vtk visualization (cf. <code>Variable.visualize</code>).
         name
+        grids %in case grid varies
+        content
     end
 
     properties (Access = private, Hidden)
         %> This is where the internal data is stored, index shift! (1 is initial)
         %> cell array with length equal to numsteps + 1, where one entry is
-        content
+        %content
     end
 
     %% constructor %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

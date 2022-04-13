@@ -1,4 +1,4 @@
-function signedDistance = reinitializeLevelSet(grid, levelSet)
+function signedDistance = reinitializeLevelSetOld(grid, levelSet)
 %REINITIALIZELEVELSET    Reinitialize level set function.
 %   Reinitializes a level set function LSF to the signed distance function
 %   corresponding to the level set \{ LSF=0 \}. This SDF is the solution of the
@@ -16,7 +16,7 @@ assert(abs(numel(levelSet) - grid.nodes) < eps, ...
     'Values are not compatible with the given grid.');
 
 % Initialize values on/near the interface.
-signedDistance = initializeFMM(grid, levelSet);
+signedDistance = initializeFMMOld(grid, levelSet);
 
 % Initialize result vectors for the domains in which the level set function
 % is positive / negative.
@@ -47,7 +47,7 @@ trialIndexNeg = find(isTrialNeg);
 % Find the distances of the nodes on the positive domain of LSF.
 while (any(isTrialPos(:)))
     [positiveDist, isKnown, isTrialPos, trialIndexPos] = ...
-        FMM_iteration(positiveDist, isKnown, isTrialPos, ...
+        FMM_iterationOld(positiveDist, isKnown, isTrialPos, ...
         trialIndexPos, grid, isPositiveNode);
 
     %         % Find the TRIAL node with the minimal distance and set it to KNOWN.
@@ -76,7 +76,7 @@ end
 % Find the distances of the points on the negative domain of LSF.
 while (any(isTrialNeg(:)))
     [negativeDist, isKnown, isTrialNeg, trialIndexNeg] = ...
-        FMM_iteration(negativeDist, isKnown, isTrialNeg, ...
+        FMM_iterationOld(negativeDist, isKnown, isTrialNeg, ...
         trialIndexNeg, grid, isNegativeNode);
 
     %         [~, maxIndex] = max( negativeDist( isTrialNeg ) );
@@ -112,7 +112,7 @@ end
 end
 
 function [distance, isKnown, isTrial, trialIndex] = ...
-    FMM_iteration(distance, isKnown, isTrial, trialIndex, grid, toBeComputed)
+    FMM_iterationOld(distance, isKnown, isTrial, trialIndex, grid, toBeComputed)
 
 % Find the TRIAL node with the minimal distance and set it to KNOWN.
 [~, minIndex] = min(distance(isTrial));
@@ -134,7 +134,7 @@ isTrial(newIndices(~isnan(newIndices))) = ...
 trialIndex = find(isTrial);
 
 % Update the distance values for all new TRIAL nodes.
-distance = updateDistance(grid, 1:grid.dimension, ...
+distance = updateDistanceOld(grid, 1:grid.dimension, ...
     distance, newIndices(:));
 
 end

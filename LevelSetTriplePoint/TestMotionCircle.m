@@ -1,6 +1,6 @@
 % Use a few steps of VIIM to generate a non-trivial geometry and calculate
 % the smoothed indicator function if \Chi=3
-
+%cf. [2] Figure 2
 %% Perform evolution of two semincircles via VIIM
 % %Full test case
 close all

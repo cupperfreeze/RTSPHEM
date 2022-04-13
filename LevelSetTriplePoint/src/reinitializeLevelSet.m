@@ -11,7 +11,7 @@ function signedDistance = reinitializeLevelSet(grid, levelSet, isSigned, restric
 %   ATTENTION: This method only works on cartesian grids. Currently only
 %   operational for positive Distances
 
-assert(isa(grid, 'CartesianGrid'), ...
+assert(isa(grid, 'CartesianGrid')|| isa(grid, 'CartesianGrid3D'), ...
     'Grid is not of class ''CartesianGrid''.');
 assert(abs(numel(levelSet) - grid.nodes) < eps, ...
     'Values are not compatible with the given grid.');
@@ -54,7 +54,13 @@ isTrialPos(~isinf(positiveDist) & positiveDist > 0) = true;
 isTrialNeg(~isinf(negativeDist) & negativeDist > 0) = true;
 
 
-neighborIndices = [grid.pull{1, 1, 1}, grid.pull{2, 1, 1}, grid.pull{1, 1, 2}, grid.pull{2, 1, 2}]';
+switch grid.dimension
+        case 2
+            neighborIndices = [grid.pull{1,1,1},grid.pull{2,1,1},grid.pull{1,1,2},grid.pull{2,1,2}]';
+        case 3
+            neighborIndices = [grid.pull{1,1,1},grid.pull{2,1,1},grid.pull{1,1,2},grid.pull{2,1,2},grid.pull{1,1,3},grid.pull{2,1,3}]';
+end
+
 
 h = grid.stepSize;
 dim = grid.dimension;

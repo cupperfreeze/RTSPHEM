@@ -1,5 +1,6 @@
 % MicroScale simulation using Voronoi Implicit Interface Method (VIIM).
 % Setup inspired by paper [Chen, 2014].
+% cf. [2] Section 4.2
 close all
 %parameter
 

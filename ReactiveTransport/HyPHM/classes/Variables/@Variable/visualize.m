@@ -44,20 +44,22 @@ if ~exist(['./vtk/', savedir], 'dir')
 end
 
 % data may not be set for every time step of stepper
-% limit will indicate last time instance data are set
-for limit = 0:this.stepper.numsteps
-    try
-        data = this.getdata(limit);
-    catch
-        limit = limit - 1;
-        break
-    end
+% hasContent will indicate instances when data are set
+hasContent=[];
+for i = 0:this.stepper.numsteps
+     try
+        if ~issparse(this.getdata(i))
+            data = this.getdata(i);
+            hasContent=[hasContent,i];
+        end
+     catch
+     end
 end
 
-filenames = cell(limit+1, 1);
-timepts = zeros(limit+1, 1);
+filenames = cell(this.stepper.numsteps+1, 1);
+timepts = zeros(this.stepper.numsteps+1, 1);
 
-for k = 0:limit
+for k = hasContent
     filenames{k+1} = [this.name, '.', num2str(k), '.vtu'];
     timepts(k+1) = this.stepper.timeofstep(k);
 end
@@ -65,7 +67,7 @@ end
 vtkseries(timepts, filenames, ['./vtk/', savedir, '/', this.name, '.pvd']);
 
 % call the visslice function in the type package directory for each time point
-for k = 0:limit
+for k = hasContent
     filename = ['./vtk/', savedir, '/', filenames{k + 1}]; %#ok<NASGU>
     data = this.getdata(k); %#ok<NASGU>
     if numel(this.grids) == 1 || numel(this.grids{2}) == 0

@@ -4,6 +4,7 @@
 
 % Run dissolution simulation on a 6x3 random porosity field and test
 % adaptivity scheme
+% cf. [4] Section 5.2
 
 GeometrySizes = sqrt((1-[0.4692, 0.5808, 0.7421, 0.7212, 0.4265, 0.7947, 0.6197, 0.7475, 0.376, ...
     0.516, 0.6151, 0.6279, 0.7846, 0.5311, 0.7902, 0.7807, 0.6057, 0.7722]')./4);

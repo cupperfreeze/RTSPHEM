@@ -57,5 +57,13 @@ if isempty(this.gF)
     this.gF = Variable(this.grid, this.stepper, 'gF', 'P0E');
     this.gF.setdata(NaN(numE, 1));
 end
+if isempty(this.uR)
+    printline(~isSlt*3, 'Robin ambient data uR was not defined, initializing it by NaN (cautionary).')
+    this.uR  = Variable(this.grid, this.stepper, 'uR',  'P0E'); this.uR.setdata(NaN(numE, 1));
+end
+if isempty(this.rob)
+    printline(~isSlt*3, 'Robin constant rob was not defined, initializing it by NaN (cautionary).')
+    this.rob  = Variable(this.grid, this.stepper, 'rob',  'C'); this.rob.setdata(NaN);
+end 
 
 end

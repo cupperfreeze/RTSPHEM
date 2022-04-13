@@ -1,4 +1,4 @@
-function [newDistance] = updateDistance(grid, dimensions, distance, ...
+function [newDistance] = updateDistanceOld(grid, dimensions, distance, ...
     updateIndex)
 %UPDATEDISTANCE    Update distance values
 
@@ -71,7 +71,7 @@ if (any(needsLowerUpdate))
         newDims = dimensions;
         newDims(d) = [];
 
-        potentialDistance(:, d) = updateDistance(grid, newDims, ...
+        potentialDistance(:, d) = updateDistanceOld(grid, newDims, ...
             distance, updateIndex(needsLowerUpdate));
 
     end

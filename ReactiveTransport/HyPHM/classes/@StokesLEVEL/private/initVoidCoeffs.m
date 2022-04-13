@@ -25,7 +25,7 @@ end
 if isempty(this.L)
     %  printline(~isSlt*3, 'Unknown L (LevelSet) was not defined, initializing it by zero for the initial step.')
     this.L = Variable(this.grid, this.stepper, 'L', 'P1');
-    this.L.setdata(0, zeros(numV, 1));
+    this.L.setdata(-ones(numV, 1));
 end
 if isempty(this.F)
     printline(~isSlt*3, 'Coefficient F (force) was not defined, initializing it by zero for all steps.')

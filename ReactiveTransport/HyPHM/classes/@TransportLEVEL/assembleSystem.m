@@ -16,6 +16,7 @@
 %> @param   dataAold   [ #T        ]  Coordinates of A  in @f$\mathbb{P}_0(\mathcal{T})@f$ at previous time.
 %> @param   dataC      [ #E        ]  Coordinates of C  in @f$\mathbb{RT}_0(\mathcal{T})@f$ at current time.
 %> @param   dataD      [ #T x 4    ]  Coordinates of D  in @f$\mathbb{P}_0(\mathcal{T})^{4}@f$ at current time.
+%> @param   RobinData  [ #E        ]  Coordinates of uR in @f$\mathbb{P}_0(\mathcal{E})@f$ at current time.
 %> @param   dataE      [ #E        ]  Coordinates of E  in @f$\mathbb{RT}_0(\mathcal{T})@f$ at current time.
 %> @param   datauD     [ #E        ]  Coordinates of uD in @f$\mathbb{P}_0(\mathcal{E})@f$ on edges at current time (def on ALL edges, but maybe NaN on non-Dirichlet ones).
 %> @param   datagF     [ #E        ]  Coordinates of gF in @f$\mathbb{P}_0(\mathcal{E})@f$ on edges at current time (def on ALL edges, but maybe NaN on non-flux ones).
@@ -27,8 +28,8 @@
 
 
 function [B, C, D, E, bQ, bU, Y] = assembleSystem(this, Upasts, BDFq, curTau, ...
-    dataA, dataAold, dataAvold, dataB, dataBold, dataC, dataD, isDstationary, dataE, dataF, ...
-    datauD, datagF, markDirE, markNeumE, markFluxE, idxNeumE, isSlt) %#ok<*SPRIX>
+                     dataA, dataAold, dataAvold, dataB, dataBold, dataC, dataD, RobinData, isDstationary, dataE, dataF, ...
+                     datauD, datagF, markDirE, markNeumE, markRobinE, markFluxE, idxNeumE, idxRobinE, isSlt) %#ok<*SPRIX>
 
 g = this.grid;
 numT = g.numT;
@@ -203,6 +204,15 @@ bQ = bQ - B * Y;
 bU = bU - curTau * D * Y;
 
 clear HlocT
+
+% Adjust for Robin boundary conditions
+if numel(idxRobinE)>0
+   rob = this.rob.getdata(this.stepper.curstep);
+   for idxEdge = idxRobinE
+        B(idxEdge,idxEdge) = B(idxEdge,idxEdge) -1./rob .* g.areaE(idxEdge);
+   end
+    bQ(markRobinE) = bQ(markRobinE) + g.areaE(markRobinE) .* RobinData(markRobinE);
+end
 
 printline(~isSlt*3, '                      ...done [%.3f sec]', toc(tAssembly)) % stop timer assembly linear part
 

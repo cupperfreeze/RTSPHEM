@@ -1,4 +1,3 @@
-%% analogous to FMM_Iteration but additionally calculation normal velocity extension
 function [distance, orthogonalS] = ...
     FMM_iteration_WithS(distance, isKnown, h, dim, restrictDist, orthogonalS, neighborIndices)
 
@@ -21,69 +20,91 @@ whereIsWhat(indexHeap(1:numelements)) = uint32(1:numelements);
 
 kHeap = uint32(sum(val < inf));
 
+doExit = false;
+
 %%
 
 while (kHeap > 0)
+    % Find the TRIAL node with the minimal distance and set it to KNOWN.
+    %   [valueExit, minIndex] = min( distance( isTrial ) );
+    %   find(isTrial);
 
     %% Extract Min
 
-    HEAPMin = valuesHeap(1);
-    if HEAPMin > restrictDist;
-        break;
-    end
-    HEAPMinIndex = indexHeap(1);
+    GMMconst = 200;
+    HEAPMin = zeros(1, GMMconst);
+    HEAPMinIndex = zeros(1, GMMconst);
 
-    valuesHeap(1) = inf;
-    kHeap = kHeap - 1;
-    i = uint32(1);
+    for m = 1:GMMconst
+        HEAPMin(m) = valuesHeap(1);
+        HEAPMinIndex(m) = indexHeap(1);
 
-    while i < double(sizeOfHeap) / 2
+        if HEAPMin(m) > HEAPMin(1) + 1 / sqrt(2) * h(1) / 1.01 || HEAPMin(m) > restrictDist
+            if ~isinf(HEAPMin(m)) && HEAPMin(m) > restrictDist
+                doExit = true;
+            end
+            HEAPMin = HEAPMin(1:(m - 1));
+            HEAPMinIndex = HEAPMinIndex(1:(m - 1));
+            break
+        end
 
 
-        if valuesHeap(2*i) <= valuesHeap(2*i+1) && valuesHeap(i) > valuesHeap(2*i)
-            whereIsWhat(indexHeap(2 * i)) = i;
-            whereIsWhat(indexHeap(i)) = 2 * i;
+        valuesHeap(1) = inf;
+        kHeap = kHeap - 1;
+        i = uint32(1);
 
-            swap = valuesHeap(2*i);
-            valuesHeap(2*i) = valuesHeap(i);
-            valuesHeap(i) = swap;
+        while i < double(sizeOfHeap) / 2
 
-            swap = indexHeap(2*i);
-            indexHeap(2*i) = indexHeap(i);
-            indexHeap(i) = swap;
 
-            i = 2 * i;
-            continue
-        else
+            if valuesHeap(2*i) <= valuesHeap(2*i+1) && valuesHeap(i) > valuesHeap(2*i)
+                whereIsWhat(indexHeap(2 * i)) = i;
+                whereIsWhat(indexHeap(i)) = 2 * i;
 
-            if valuesHeap(2*i) >= valuesHeap(2*i+1) && valuesHeap(i) > valuesHeap(2*i+1)
-                whereIsWhat(indexHeap(2 * i + 1)) = i;
-                whereIsWhat(indexHeap(i)) = 2 * i + 1;
-
-                swap = valuesHeap(2*i+1);
-                valuesHeap(2*i+1) = valuesHeap(i);
+                swap = valuesHeap(2*i);
+                valuesHeap(2*i) = valuesHeap(i);
                 valuesHeap(i) = swap;
 
-                swap = indexHeap(2*i+1);
-                indexHeap(2*i+1) = indexHeap(i);
+                swap = indexHeap(2*i);
+                indexHeap(2*i) = indexHeap(i);
                 indexHeap(i) = swap;
 
-                i = 2 * i + 1;
+                i = 2 * i;
                 continue
+            else
+
+                if valuesHeap(2*i) >= valuesHeap(2*i+1) && valuesHeap(i) > valuesHeap(2*i+1)
+                    whereIsWhat(indexHeap(2 * i + 1)) = i;
+                    whereIsWhat(indexHeap(i)) = 2 * i + 1;
+
+                    swap = valuesHeap(2*i+1);
+                    valuesHeap(2*i+1) = valuesHeap(i);
+                    valuesHeap(i) = swap;
+
+                    swap = indexHeap(2*i+1);
+                    indexHeap(2*i+1) = indexHeap(i);
+                    indexHeap(i) = swap;
+
+                    i = 2 * i + 1;
+                    continue
+                end
             end
+            break
         end
-        break
     end
 
     %%
+
+
     curIndex = HEAPMinIndex;
     isKnown(curIndex) = true;
 
 
-    newIndices = zeros(1, 2*dim);
+    % Mark all neighbours of the newly KNOWN node and mark them as TRIAL
+    % (if they are not yet KNOWN).
+    newIndices = zeros(numel(HEAPMin), 2*dim);
     for d = 1:dim
-        newIndices(2*d-1) = neighborIndices(2+2*(d - 1), curIndex);
-        newIndices(2*d) = neighborIndices(1+2*(d - 1), curIndex);
+        newIndices(:, 2*d-1) = neighborIndices(2+2*(d - 1), curIndex);
+        newIndices(:, 2*d) = neighborIndices(1+2*(d - 1), curIndex);
     end
     newIndices(newIndices < 0.5) = [];
 
@@ -93,14 +114,20 @@ while (kHeap > 0)
         distance, newIndices(:), orthogonalS, neighborIndices);
 
     old = distance(newIndices(:));
-    distance(newIndices(:)) = updatedDistance;
+    %distance(newIndices(:)) = updatedDistance;
 
-    gotUpdated = updatedDistance - old < 0 * 10 * 10^(-16);
+    for j = 1:numel(newIndices)
+        if distance(newIndices(j)) > updatedDistance(j)
+            distance(newIndices(j)) = updatedDistance(j);
+            orthogonalS(newIndices(j)) = updatedOrthogonalS(j);
+        end
+    end
+
+    gotUpdated = (abs(updatedDistance - old) > 0);
     changeIndex = newIndices(gotUpdated);
     updateValue = distance(changeIndex);
 
-    orthogonalS(changeIndex) = updatedOrthogonalS;
-
+    %    orthogonalS(changeIndex) = updatedOrthogonalS;
 
     for j = 1:length(updateValue)
 
@@ -140,6 +167,10 @@ while (kHeap > 0)
         end
 
 
+    end
+
+    if doExit
+        break
     end
 end
 

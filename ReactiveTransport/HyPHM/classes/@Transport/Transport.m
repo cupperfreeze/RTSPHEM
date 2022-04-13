@@ -190,6 +190,8 @@ classdef Transport < AbstractProblem
         id2F
         %> List of edge IDs defining Dirichlet boundaries [cell].
         id2D
+        %> List of edge IDs defining Robin boundaries [cell].
+        id2R
     end
 
     % Storage of stationary assembling matrices
@@ -231,6 +233,10 @@ classdef Transport < AbstractProblem
         %> Flux data, Variable in @f$\mathbb{P}_0(\mathcal{E})@f$.
         %> @todo allow C(E).
         gF
+        %> Robin constant
+        rob
+        %> Robin ambient function
+        uR
     end
 
     %% Constructor %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -311,6 +317,18 @@ classdef Transport < AbstractProblem
             this.checkVariable(uD)
             uD.checkType('P0E')
             this.uD = uD;
+        end
+        
+        function this = set.uR(this, uR)
+            this.checkVariable(uR)
+            uR.checkType('P0E')
+            this.uR = uR;
+        end
+    
+        function this = set.rob(this, rob)
+            this.checkVariable(rob)
+            rob.checkType('C')  
+            this.rob = rob;
         end
 
         function this = set.gF(this, gF)

@@ -194,6 +194,8 @@ classdef TransportLEVEL < AbstractProblem
         id2F
         %> List of edge IDs defining Dirichlet boundaries [cell].
         id2D
+        %> List of edge IDs defining Robin boundaries [cell].
+        id2R 
     end
 
     % Storage of stationary assembling matrices
@@ -235,6 +237,10 @@ classdef TransportLEVEL < AbstractProblem
         %> Flux data, Variable in @f$\mathbb{P}_0(\mathcal{E})@f$.
         %> @todo allow C(E).
         gF
+        %> Robin constant
+        rob
+        %> Robin ambient function
+        uR
         %> Level-Set Function, Variable in @f$\mathbb{P}_1(\mathcal{T})@f$
         L
     end
@@ -281,7 +287,7 @@ classdef TransportLEVEL < AbstractProblem
 
         function this = set.A(this, A)
             this.checkVariable(A)
-            A.checkType('P0')
+             A.checkType({'P0','C'})
             this.A = A;
         end
 
@@ -321,6 +327,18 @@ classdef TransportLEVEL < AbstractProblem
             this.uD = uD;
         end
 
+        function this = set.uR(this, uR)
+            this.checkVariable(uR)
+            uR.checkType('P0E')
+            this.uR = uR;
+        end
+    
+        function this = set.rob(this, rob)
+            this.checkVariable(rob)
+            rob.checkType('C')  
+            this.rob = rob;
+        end
+        
         function this = set.L(this, L)
             this.checkVariable(L)
             L.checkType('P1')

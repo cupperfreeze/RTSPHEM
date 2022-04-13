@@ -1,4 +1,4 @@
-function [phi] = initializeFMM(grid, lsf)
+function [phi] = initializeFMMOld(grid, lsf)
 % Initialization for compution of signed distance function of the interface
 % LSF=0.
 
