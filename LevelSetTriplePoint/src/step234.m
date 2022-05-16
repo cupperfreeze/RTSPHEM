@@ -63,7 +63,7 @@ for i = 1:length(exceptions)
     end
 end
 
-initialS(isinf(initialS(:, 1)), 1) = initialS(isinf(initialS(:, 1)), 2);
+initialS(isinf(initialS(:, 1)), 1) =  min(initialS(isinf(initialS(:, 1)), :), [], 2);% initialS(isinf(initialS(:, 1)), 2);
 [dV, S] = reinitializeLevelSetWithS(grid, dVInitial, restrictDist, initialS(:, 1)');
 S(isinf(S)) = 0;
 

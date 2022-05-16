@@ -38,7 +38,7 @@ while (kHeap > 0)
         HEAPMin(m) = valuesHeap(1);
         HEAPMinIndex(m) = indexHeap(1);
 
-        if HEAPMin(m) > HEAPMin(1) + 1 / sqrt(2) * h(1) / 1.01 || HEAPMin(m) > restrictDist
+        if HEAPMin(m) > HEAPMin(1) + 1 / sqrt(double(dim)) * h(1) / 1.01 || HEAPMin(m) > restrictDist
             if ~isinf(HEAPMin(m)) && HEAPMin(m) > restrictDist
                 doExit = true;
             end
