@@ -2,6 +2,9 @@
 
 **RTSPHEM** — **Reactive Transport Solver in Porous Homogenized Evolving Media** includes software and data sets developed in the porous media research conducted at the Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), Germany, within the Research Training Group RTG 2339 funded by DFG. More precisely, the code provided is related to the following publications:
 
+- [-1] S. Gärttner, F. Frank, F. Woller, A. Meier, N. Ray:
+**Estimating relative diffusion from 3D micro-CT images using CNNs**, arXiv, 2021.
+https://arxiv.org/abs/2208.03337
 - [0] M. Kelm, S. Gärttner, C. Bringedal, B. Flemisch, P. Knabner, N. Ray:
 **Comparison study of phase-field and level-set method for three-phase systems including two minerals**, Computational Geosciences,  2022.
 - [1] S. Gärttner, F. O. Alpak, A. Meier, N. Ray, F. Frank:
@@ -124,6 +127,17 @@ Reactive transport simulations and source code.
 			- `BlockPrec`: Take advantage of system's structure by specialized solver, cf. [2] Chapter 3.2. Block diagonal ilu(k) preconditioner with resorting/rescaling (needs (1), (2) installed).
 			- `ilukIterative`: Matlab's bicgstab with ilu(k) preconditioner (needs (1) installed).
 			- `StandardIterative`: Matlab's bicgstab with ILU preconditioner.
+
+### `3DRelDiffCNN/`
+
+Code related to the training of a CNN on 3D segmented binary image data for scalar relative diffusion prediction, cf. [-1].
+The underlying data-set is derived from the voxel-data of the `3DPermCNN/` experiment and can be derived using /Miscellaneous/ApplyMorph.m
+This project shares a lot of code with `3DPermCNN/`.
+
+- `CNN/`: Contains script to train CNN and pretrained network itself. Usage of Cuda GPUs is recommended.
+- `ComputedData/`: Computed diffusion values (DiffData) and sample characteristics (surface area, porosity).
+- `TauFactor/`: Scripts for performing diffusion computation using TauFactor (doi: 10.1016/j.softx.2016.09.002)
+- `Miscellaneous/`: Scripts for plotting, morphological model and heuristic law fitting
 
 ### `3DPermCNN/`
 
