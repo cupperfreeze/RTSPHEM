@@ -7,6 +7,7 @@
 https://arxiv.org/abs/2208.03337
 - [0] M. Kelm, S. Gärttner, C. Bringedal, B. Flemisch, P. Knabner, N. Ray:
 **Comparison study of phase-field and level-set method for three-phase systems including two minerals**, Computational Geosciences,  2022.
+https://link.springer.com/article/10.1007/s10596-022-10142-w
 - [1] S. Gärttner, F. O. Alpak, A. Meier, N. Ray, F. Frank:
 **Estimating permeability of 3D micro-CT images by physics-informed CNNs based on DNS**, arXiv, 2021.
 https://arxiv.org/abs/2109.01818
