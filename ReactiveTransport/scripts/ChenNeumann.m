@@ -1,6 +1,6 @@
 % MicroScale simulation using Voronoi Implicit Interface Method (VIIM).
 % Setup inspired by paper [Chen, 2014].
-% Test with Robin boundary conditions
+% Test with Neumann boundary conditions
 % cf. [2] Section 4.2
 close all
 %parameter
@@ -10,7 +10,7 @@ Solver = 'ilukIterative';
 currentTime = 0;
 reinitCount = 0;
 finishTime = 15;
-numtimeSteps = 200; %upper bound on timeSteps
+numtimeSteps = 150; %upper bound on timeSteps
 
 %setup grid
 
@@ -146,7 +146,6 @@ while transportStepperSave.next
     IdInterface2 = abs(abs(initialS)-2) < eps;
 
     interfaceVelocitiesNodes = zeros(gridHyPHMBasis.numV, 1);
-
     %calculate normal interface velocity
     for i = find(~isinf(initialS))'
         [~, idx] = min(2*abs(baryBoundaryTriangles(:, 1) - gridHyPHMBasis.coordV(i, 1))+ ...
@@ -163,7 +162,7 @@ while transportStepperSave.next
     %Reconstruct Vonoroi Interface and velocity extension
     [dV, S] = reinitializeLevelSetWithS(cellGrid, dVInitial, inf, initialS');
     maxS = max(S(~isinf(S)));
-    CFL = abs(lengthX*0.5/maxS/numPartitions);
+    CFL = abs(lengthX*0.4/maxS/numPartitions)
     if transportStepperSave.curstep < 5
         CFL = min(CFL, 0.1);
     end
@@ -249,18 +248,13 @@ while transportStepperSave.next
             'A', 'P0');
 
         ATransport = TransportLEVEL(gridHyPHM, transportStepper, 'A Transport');
-        % ATransport.id2D = {4};
-        % ATransport.uD.setdata(2*10^(-6)*ones(gridHyPHM.numE,1));
-        ATransport.id2R = {4};
-        ATransport.uR.setdata(2*10^(-6)*ones(gridHyPHM.numE, 1));
-        ATransport.rob.setdata(100);
-
+        ATransport.uD.setdata(2*10^(-6)*ones(gridHyPHM.numE, 1));
         ATransport.D.setdata(diffusionCoefficient*eye(2));
         ATransport.id2N = {1, 3};
-        ATransport.id2F = {2};
-        ATransport.U = Aconcentration;
+        ATransport.id2F = {2, 4};
         ATransport.gF = Variable(gridHyPHM, transportStepper, 'gF', 'P0E');
-        ATransport.gF.setdata(-2*inletVelocity*(gridHyPHM.baryE(:, 1) < -0.5 + eps));
+        ATransport.gF.setdata(-2*inletVelocity*(gridHyPHM.baryE(:, 1) < eps)- ...
+            2000*10^(-11)*(gridHyPHM.baryE(:, 1) < eps));
         ATransport.A = Variable(gridHyPHM, transportStepper, 'Porosity', 'P0');
         ATransport.A.setdata(ones(gridHyPHM.numT, 1));
         ATransport.C.setdata(flow);
@@ -272,18 +266,15 @@ while transportStepperSave.next
 
 
         BTransport = TransportLEVEL(gridHyPHM, transportStepper, 'B Transport');
-        %BTransport.id2D = {4};
-        %BTransport.uD.setdata(zeros(gridHyPHM.numE,1));
-        BTransport.id2R = {4};
-        BTransport.uR.setdata(zeros(gridHyPHM.numE, 1));
-        BTransport.rob.setdata(100);
-
+        BTransport.id2D = {4};
+        BTransport.uD.setdata(0*10^(-6)*ones(gridHyPHM.numE, 1));
         BTransport.D.setdata(diffusionCoefficient*eye(2));
         BTransport.id2N = {1, 3};
         BTransport.id2F = {2};
         BTransport.U = BConcentration;
         BTransport.gF = Variable(gridHyPHM, transportStepper, 'gF', 'P0E');
-        BTransport.gF.setdata(-1*inletVelocity*(gridHyPHM.baryE(:, 1) < -0.5 + eps));
+        BTransport.gF.setdata(-1*inletVelocity*(gridHyPHM.baryE(:, 1) < -0.5 + eps)+ ...
+            0*10^(-8)*(gridHyPHM.baryE(:, 1) < eps));
         BTransport.A = Variable(gridHyPHM, transportStepper, 'Porosity', 'P0');
         BTransport.A.setdata(ones(gridHyPHM.numT, 1));
         BTransport.C.setdata(flow);
@@ -293,18 +284,14 @@ while transportStepperSave.next
             'C', 'P0');
 
         CTransport = TransportLEVEL(gridHyPHM, transportStepper, 'C Transport');
-        %CTransport.id2D = {4};
-        %CTransport.uD.setdata(2*10^(-6)*ones(gridHyPHM.numE,1));
-        CTransport.id2R = {4};
-        CTransport.uR.setdata(2*10^(-6)*ones(gridHyPHM.numE, 1));
-        CTransport.rob.setdata(100);
-
+        CTransport.uD.setdata(2*10^(-6)*ones(gridHyPHM.numE, 1));
         CTransport.D.setdata(diffusionCoefficient*eye(2));
         CTransport.id2N = {1, 3};
-        CTransport.id2F = {2};
+        CTransport.id2F = {2, 4};
         CTransport.U = CConcentration;
         CTransport.gF = Variable(gridHyPHM, transportStepper, 'gF', 'P0E');
-        CTransport.gF.setdata(-1*inletVelocity*(gridHyPHM.baryE(:, 1) < -0.5 + eps));
+        CTransport.gF.setdata(-1*inletVelocity*(gridHyPHM.baryE(:, 1) < -0.5 + eps)- ...
+            2000*10^(-11)*(gridHyPHM.baryE(:, 1) < eps));
         CTransport.A = Variable(gridHyPHM, transportStepper, 'Porosity', 'P0');
         CTransport.A.setdata(ones(gridHyPHM.numT, 1));
         CTransport.C.setdata(flow);
@@ -312,7 +299,7 @@ while transportStepperSave.next
     end 
 
 
-    %set data on new mesh
+    %set data
     now = transportStepperSave.curstep - 1;
     temp = AconcentrationSave.getTSI(now);
     ATransport.U.setdata(0, temp(gridHyPHM.baryT(:, 1), gridHyPHM.baryT(:, 2)));
@@ -352,39 +339,20 @@ while transportStepperSave.next
 
     % nonlinear reaction equations
 
-    epsilon2 = 10^(-18);
-    %     nonlinearFunc = cell( 3, 1 );
-    %     nonlinearFunc{1} = @(a,b,c) (IdInterface1.*(K1*max(b,sqrt(epsilon2))./max(a,sqrt(epsilon2))-1) ) .* SorceScale;
-    %     nonlinearFunc{2} = @(a,b,c) (-IdInterface2.*( K2*b.*c-1) -IdInterface1.*(K1*b./max(a,sqrt(epsilon2))-1)).* SorceScale;
-    %     nonlinearFunc{3} = @(a,b,c) (-IdInterface2.*(K2*b .* c-1) ) .* SorceScale;
-    %
-    %     nonlinearJacFunc = cell(3 , 3 );
-    %     nonlinearJacFunc{1,1} = @(a,b,c) ((-IdInterface1.*(K1*b./max(a.^2,epsilon2))).*(a>sqrt(epsilon2)) + abs(sqrt(epsilon2)-a).* (a<sqrt(epsilon2))) .* SorceScale;
-    %     nonlinearJacFunc{1,2} = @(a,b,c) IdInterface1.*(K1*1./max(a,sqrt(epsilon2))).* SorceScale;
-    %     nonlinearJacFunc{1,3} = @(a,b,c) 0;
-    %
-    %     nonlinearJacFunc{2,1} = @(a,b,c) (IdInterface1.*(K1*b./max(a.^2,epsilon2))  ) .* SorceScale;
-    %     nonlinearJacFunc{2,2} = @(a,b,c) ((-IdInterface2.*c *K2 ...
-    %                                         -IdInterface1.*(K1./max(a,sqrt(epsilon2)))).* (b>sqrt(epsilon2))  + abs(sqrt(epsilon2)-b).* (b<sqrt(epsilon2))) .* SorceScale;
-    %     nonlinearJacFunc{2,3} = @(a,b,c) -IdInterface2.* b .* K2 .* SorceScale;
-    %
-    %     nonlinearJacFunc{3,1} = @(a,b,c) 0;
-    %     nonlinearJacFunc{3,2} = @(a,b,c) -IdInterface2 .* c .* K2  .* SorceScale;
-    %     nonlinearJacFunc{3,3} = @(a,b,c) (-IdInterface2 .* b.* K2 ) .* SorceScale;
-
+    epsilon2 = 10^(-20);
     nonlinearFunc = cell(3, 1);
-    nonlinearFunc{1} = @(a, b, c) (IdInterface1 .* (K1 * max(b, sqrt(epsilon2)) ./ max(a, sqrt(epsilon2)) - 1)) .* SorceScale;
+    nonlinearFunc{1} = @(a, b, c) (IdInterface1 .* (K1 * b ./ max(a, sqrt(epsilon2)) - 1)) .* SorceScale;
     nonlinearFunc{2} = @(a, b, c) (-IdInterface2 .* (K2 * b .* c - 1) - IdInterface1 .* (K1 * b ./ max(a, sqrt(epsilon2)) - 1)) .* SorceScale;
     nonlinearFunc{3} = @(a, b, c) (-IdInterface2 .* (K2 * b .* c - 1)) .* SorceScale;
 
     nonlinearJacFunc = cell(3, 3);
-    nonlinearJacFunc{1, 1} = @(a, b, c) (-IdInterface1 .* (K1 * b ./ max(a.^2, epsilon2))) .* SorceScale;
+    nonlinearJacFunc{1, 1} = @(a, b, c) ((-IdInterface1 .* (K1 * b ./ max(a.^2, epsilon2)))) .* SorceScale;
     nonlinearJacFunc{1, 2} = @(a, b, c) IdInterface1 .* (K1 * 1 ./ max(a, sqrt(epsilon2))) .* SorceScale;
     nonlinearJacFunc{1, 3} = @(a, b, c) 0;
 
     nonlinearJacFunc{2, 1} = @(a, b, c) (IdInterface1 .* (K1 * b ./ max(a.^2, epsilon2))) .* SorceScale;
-    nonlinearJacFunc{2, 2} = @(a, b, c) (-IdInterface2 .* c * K2 ...
-        -IdInterface1 .* (K1 ./ max(a, sqrt(epsilon2)))) .* SorceScale;
+    nonlinearJacFunc{2, 2} = @(a, b, c) ((-IdInterface2 .* c * K2 ...
+        -IdInterface1 .* (K1 ./ max(a, sqrt(epsilon2))))) .* SorceScale;
     nonlinearJacFunc{2, 3} = @(a, b, c) -IdInterface2 .* b .* K2 .* SorceScale;
 
     nonlinearJacFunc{3, 1} = @(a, b, c) 0;
@@ -395,7 +363,6 @@ while transportStepperSave.next
     fprintf(['\n', 'CurrentTime: ', num2str(transportStepperSave.curtime), ' at step: ', num2str(transportStepperSave.curstep)])
     newtonIteration(speciesCells, nonlinearFunc, nonlinearJacFunc, 20);
 
-    %save data
     AconcentrationSave.setdataGrid(transportStepperSave.curstep, ATransport.U.getdata(1), gridHyPHM);
     AFlux{transportStepperSave.curstep} = ATransport.Q.getdata(1);
     BconcentrationSave.setdataGrid(transportStepperSave.curstep, BTransport.U.getdata(1), gridHyPHM);
@@ -435,6 +402,10 @@ title('Current S');
 
 [interfaceLength, coordTripel] = evaluateInterface(cellGrid, Xi, distFunctions, false)
 
+% add a circle of radius centering (X,Y) to the function handle for geometry evolution and
+% adjust indicator Xi accordingly. Via two additional arguments the
+% procedure generalizes to ellipses with ratio of half-axis and rotated by
+% alpha
 function [functionhandle, Xi] = drawcircle(X, Y, radius, epsilon, functionhandle, Xi, coord, varargin)
 ratio = ones(size(X));
 alpha = zeros(size(X));

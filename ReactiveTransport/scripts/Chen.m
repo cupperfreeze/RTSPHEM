@@ -5,7 +5,7 @@ close all
 %parameter
 
 global Solver
-Solver = 'StandardIterative';
+Solver = 'ilukIterative';
 currentTime = 0;
 reinitCount = 0;
 finishTime = 15;
@@ -33,7 +33,7 @@ K1 = 10^(-2);
 K2 = 1.25 * 10^(13);
 molarVolume = 3 * 10^4;
 diffusionCoefficient = 10^(-3);
-inletVelocity = 0.001;
+inletVelocity = 0;
 
 timeSteps = linspace(currentTime, finishTime/(numtimeSteps - 1), 2);
 timeStepsSave = linspace(currentTime, finishTime, numtimeSteps);
@@ -351,25 +351,43 @@ while transportStepperSave.next
     % nonlinear reaction equations
 
     epsilon2 = 10^(-18);
+        %     nonlinearFunc = cell( 3, 1 );
+    %     nonlinearFunc{1} = @(a,b,c) (IdInterface1.*(K1*max(b,sqrt(epsilon2))./max(a,sqrt(epsilon2))-1) ) .* SorceScale;
+    %     nonlinearFunc{2} = @(a,b,c) (-IdInterface2.*( K2*b.*c-1) -IdInterface1.*(K1*b./max(a,sqrt(epsilon2))-1)).* SorceScale;
+    %     nonlinearFunc{3} = @(a,b,c) (-IdInterface2.*(K2*b .* c-1) ) .* SorceScale;
+    %
+    %     nonlinearJacFunc = cell(3 , 3 );
+    %     nonlinearJacFunc{1,1} = @(a,b,c) ((-IdInterface1.*(K1*b./max(a.^2,epsilon2))).*(a>sqrt(epsilon2)) + abs(sqrt(epsilon2)-a).* (a<sqrt(epsilon2))) .* SorceScale;
+    %     nonlinearJacFunc{1,2} = @(a,b,c) IdInterface1.*(K1*1./max(a,sqrt(epsilon2))).* SorceScale;
+    %     nonlinearJacFunc{1,3} = @(a,b,c) 0;
+    %
+    %     nonlinearJacFunc{2,1} = @(a,b,c) (IdInterface1.*(K1*b./max(a.^2,epsilon2))  ) .* SorceScale;
+    %     nonlinearJacFunc{2,2} = @(a,b,c) ((-IdInterface2.*c *K2 ...
+    %                                         -IdInterface1.*(K1./max(a,sqrt(epsilon2)))).* (b>sqrt(epsilon2))  + abs(sqrt(epsilon2)-b).* (b<sqrt(epsilon2))) .* SorceScale;
+    %     nonlinearJacFunc{2,3} = @(a,b,c) -IdInterface2.* b .* K2 .* SorceScale;
+    %
+    %     nonlinearJacFunc{3,1} = @(a,b,c) 0;
+    %     nonlinearJacFunc{3,2} = @(a,b,c) -IdInterface2 .* c .* K2  .* SorceScale;
+    %     nonlinearJacFunc{3,3} = @(a,b,c) (-IdInterface2 .* b.* K2 ) .* SorceScale;
+
     nonlinearFunc = cell(3, 1);
     nonlinearFunc{1} = @(a, b, c) (IdInterface1 .* (K1 * max(b, sqrt(epsilon2)) ./ max(a, sqrt(epsilon2)) - 1)) .* SorceScale;
     nonlinearFunc{2} = @(a, b, c) (-IdInterface2 .* (K2 * b .* c - 1) - IdInterface1 .* (K1 * b ./ max(a, sqrt(epsilon2)) - 1)) .* SorceScale;
     nonlinearFunc{3} = @(a, b, c) (-IdInterface2 .* (K2 * b .* c - 1)) .* SorceScale;
 
     nonlinearJacFunc = cell(3, 3);
-    nonlinearJacFunc{1, 1} = @(a, b, c) ((-IdInterface1 .* (K1 * b ./ max(a.^2, epsilon2))) .* (a > sqrt(epsilon2)) + abs(sqrt(epsilon2) - a) .* (a < sqrt(epsilon2))) .* SorceScale;
+    nonlinearJacFunc{1, 1} = @(a, b, c) (-IdInterface1 .* (K1 * b ./ max(a.^2, epsilon2))) .* SorceScale;
     nonlinearJacFunc{1, 2} = @(a, b, c) IdInterface1 .* (K1 * 1 ./ max(a, sqrt(epsilon2))) .* SorceScale;
     nonlinearJacFunc{1, 3} = @(a, b, c) 0;
 
     nonlinearJacFunc{2, 1} = @(a, b, c) (IdInterface1 .* (K1 * b ./ max(a.^2, epsilon2))) .* SorceScale;
-    nonlinearJacFunc{2, 2} = @(a, b, c) ((-IdInterface2 .* c * K2 ...
-        -IdInterface1 .* (K1 ./ max(a, sqrt(epsilon2)))) .* (b > sqrt(epsilon2)) + abs(sqrt(epsilon2) - b) .* (b < sqrt(epsilon2))) .* SorceScale;
+    nonlinearJacFunc{2, 2} = @(a, b, c) (-IdInterface2 .* c * K2 ...
+        -IdInterface1 .* (K1 ./ max(a, sqrt(epsilon2)))) .* SorceScale;
     nonlinearJacFunc{2, 3} = @(a, b, c) -IdInterface2 .* b .* K2 .* SorceScale;
 
     nonlinearJacFunc{3, 1} = @(a, b, c) 0;
     nonlinearJacFunc{3, 2} = @(a, b, c) -IdInterface2 .* c .* K2 .* SorceScale;
     nonlinearJacFunc{3, 3} = @(a, b, c) (-IdInterface2 .* b .* K2) .* SorceScale;
-
     speciesCells = {ATransport; BTransport; CTransport};
     fprintf(['\n', 'CurrentTime: ', num2str(transportStepperSave.curtime), ' at step: ', num2str(transportStepperSave.curstep)])
     newtonIteration(speciesCells, nonlinearFunc, nonlinearJacFunc, 20);
