@@ -1,7 +1,7 @@
 % Time simulations using TauFactor
 % For this script to run, please add path to TauFactor app
 
-InidzesOfData = 25000:30000;
+InidzesOfData = 1:5000;
 imSize = [100, 100, 100];
 Results = zeros(numel(InidzesOfData), 1);
 % read in Data
@@ -20,4 +20,4 @@ end
 disp('read in data done');
 Time = toc;
 
-save('EvalTaufactorLate.mat', 'Results', 'Time', '-v7.3')
+save('EvalTaufactorEarly.mat', 'Results', 'Time', '-v7.3')

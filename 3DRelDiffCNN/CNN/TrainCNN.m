@@ -4,7 +4,6 @@ p = genpath('./VoxelData/SampleBENTHEIMER');
 addpath(p);
 % set up file paths, functions, load data
 load('DiffSample2.mat');
-DiffData=PermData;
 imSize = [100,100,100];
 PercentageOfTrainImages = 0.90;												%Share training data wrt. to $complete data set 
 InidzesOfData = 1:30000;													%Indizes of data files
