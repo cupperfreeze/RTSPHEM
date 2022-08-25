@@ -5,7 +5,7 @@ function [sol, iter] = Uzawa(A, B, f, fp, p, n, scale)
 %operations are performed in the tailored mex method 'backSubs'.
 
 try
-    backSubs(sprase(1), sparse(1), 1);
+    backSubs(sparse(1), sparse(1), 1);
     backSubsFound = true;
 catch
     backSubsFound = false;
