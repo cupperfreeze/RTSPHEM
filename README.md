@@ -3,14 +3,14 @@
 **RTSPHEM** — **Reactive Transport Solver in Porous Homogenized Evolving Media** includes software and data sets developed in the porous media research conducted at the Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), Germany, within the Research Training Group RTG 2339 funded by DFG. More precisely, the code provided is related to the following publications:
 
 - [-1] S. Gärttner, F. Frank, F. Woller, A. Meier, N. Ray:
-**Estimating relative diffusion from 3D micro-CT images using CNNs**, arXiv, 2021.
+**Estimating relative diffusion from 3D micro-CT images using CNNs**, arXiv, 2022.
 https://arxiv.org/abs/2208.03337
 - [0] M. Kelm, S. Gärttner, C. Bringedal, B. Flemisch, P. Knabner, N. Ray:
-**Comparison study of phase-field and level-set method for three-phase systems including two minerals**, Computational Geosciences,  2022.
+**Comparison study of phase-field and level-set method for three-phase systems including two minerals**, Computational Geosciences 26, pp. 545–570, 2022.
 https://link.springer.com/article/10.1007/s10596-022-10142-w
 - [1] S. Gärttner, F. O. Alpak, A. Meier, N. Ray, F. Frank:
-**Estimating permeability of 3D micro-CT images by physics-informed CNNs based on DNS**, arXiv, 2021.
-https://arxiv.org/abs/2109.01818
+**Estimating permeability of 3D micro-CT images by physics-informed CNNs based on DNS**, Computational Geosciences, 2023.
+https://link.springer.com/article/10.1007/s10596-022-10184-0
 - [2] S. Gärttner, P. Frolkovič, P. Knabner, N. Ray: 
 **Efficiency of micro-macro models for ractive two-mineral systems**, SIAM MMS 20(1), pp. 433-461, 2022.
 https://doi.org/10.1137/20M1380648
